@@ -75,7 +75,7 @@ dependencies:
   - libev=4.33
   - libevent=2.1.12
   - libffi=3.4.2
-  - libgfortran=5.0.0
+  - libgfortran=*
   - libgfortran5=13.2.0
   - libgoogle-cloud=2.30.0
   - libgoogle-cloud-storage=2.30.0
