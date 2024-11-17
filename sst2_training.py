@@ -70,6 +70,7 @@ def train_sst2(args: argparse.Namespace) -> None:
         eval_strategy="epoch",
         save_strategy="epoch",
         load_best_model_at_end=True,
+        metric_for_best_model="eval_accuracy",
         push_to_hub=False,
     )
 
