@@ -1,0 +1,1718 @@
+ubuntu@ip-172-31-49-156:~/transformers/examples/pytorch/language-modeling$ fish
+Welcome to fish, the friendly interactive shell
+Type help for instructions on how to use fish
+~/t/e/p/language-modeling ((v4.45.2)|✔) $ conda activate cs230-proj
+~/t/e/p/language-modeling ((v4.45.2)|✔) $ python run_mlm.py \                                              (cs230-proj)
+                                                  --model_name_or_path google/mobilebert-uncased \
+                                                  --dataset_name wikitext \
+                                                  --dataset_config_name wikitext-2-raw-v1 \
+                                                  --per_device_train_batch_size 8 \
+                                                  --per_device_eval_batch_size 8 \
+                                                  --do_train \
+                                                  --do_eval \
+                                                  --output_dir /tmp/test-mlm
+11/17/2024 00:05:55 - WARNING - __main__ - Process rank: 0, device: cuda:0, n_gpu: 1, distributed training: False, 16-bi
+ts training: False
+11/17/2024 00:05:55 - INFO - __main__ - Training/evaluation parameters TrainingArguments(
+_n_gpu=1,
+accelerator_config={'split_batches': False, 'dispatch_batches': None, 'even_batches': True, 'use_seedable_sampler': True
+, 'non_blocking': False, 'gradient_accumulation_kwargs': None, 'use_configured_state': False},
+adafactor=False,
+adam_beta1=0.9,
+adam_beta2=0.999,
+adam_epsilon=1e-08,
+auto_find_batch_size=False,
+batch_eval_metrics=False,
+bf16=False,
+bf16_full_eval=False,
+data_seed=None,
+dataloader_drop_last=False,
+dataloader_num_workers=0,
+dataloader_persistent_workers=False,
+dataloader_pin_memory=True,
+dataloader_prefetch_factor=None,
+ddp_backend=None,
+ddp_broadcast_buffers=None,
+ddp_bucket_cap_mb=None,
+ddp_find_unused_parameters=None,
+ddp_timeout=1800,
+debug=[],
+deepspeed=None,
+disable_tqdm=False,
+dispatch_batches=None,
+do_eval=True,
+do_predict=False,
+do_train=True,
+eval_accumulation_steps=None,
+eval_delay=0,
+eval_do_concat_batches=True,
+eval_on_start=False,
+eval_steps=None,
+eval_strategy=no,
+eval_use_gather_object=False,
+evaluation_strategy=None,
+fp16=False,
+fp16_backend=auto,
+fp16_full_eval=False,
+fp16_opt_level=O1,
+fsdp=[],
+fsdp_config={'min_num_params': 0, 'xla': False, 'xla_fsdp_v2': False, 'xla_fsdp_grad_ckpt': False},
+fsdp_min_num_params=0,
+fsdp_transformer_layer_cls_to_wrap=None,
+full_determinism=False,
+gradient_accumulation_steps=1,
+gradient_checkpointing=False,
+gradient_checkpointing_kwargs=None,
+greater_is_better=None,
+group_by_length=False,
+half_precision_backend=auto,
+hub_always_push=False,
+hub_model_id=None,
+hub_private_repo=False,
+hub_strategy=every_save,
+hub_token=<HUB_TOKEN>,
+ignore_data_skip=False,
+include_inputs_for_metrics=False,
+include_num_input_tokens_seen=False,
+include_tokens_per_second=False,
+jit_mode_eval=False,
+label_names=None,
+label_smoothing_factor=0.0,
+learning_rate=5e-05,
+length_column_name=length,
+load_best_model_at_end=False,
+local_rank=0,
+log_level=passive,
+log_level_replica=warning,
+log_on_each_node=True,
+logging_dir=/tmp/test-mlm/runs/Nov17_00-05-55_ip-172-31-49-156,
+logging_first_step=False,
+logging_nan_inf_filter=True,
+logging_steps=500,
+logging_strategy=steps,
+lr_scheduler_kwargs={},
+lr_scheduler_type=linear,
+max_grad_norm=1.0,
+max_steps=-1,
+metric_for_best_model=None,
+mp_parameters=,
+neftune_noise_alpha=None,
+no_cuda=False,
+num_train_epochs=3.0,
+optim=adamw_torch,
+optim_args=None,
+optim_target_modules=None,
+output_dir=/tmp/test-mlm,
+overwrite_output_dir=False,
+past_index=-1,
+per_device_eval_batch_size=8,
+per_device_train_batch_size=8,
+prediction_loss_only=False,
+push_to_hub=False,
+push_to_hub_model_id=None,
+push_to_hub_organization=None,
+push_to_hub_token=<PUSH_TO_HUB_TOKEN>,
+ray_scope=last,
+remove_unused_columns=True,
+report_to=[],
+restore_callback_states_from_checkpoint=False,
+resume_from_checkpoint=None,
+run_name=/tmp/test-mlm,
+save_on_each_node=False,
+save_only_model=False,
+save_safetensors=True,
+save_steps=500,
+save_strategy=steps,
+save_total_limit=None,
+seed=42,
+skip_memory_metrics=True,
+split_batches=None,
+tf32=None,
+torch_compile=False,
+torch_compile_backend=None,
+torch_compile_mode=None,
+torch_empty_cache_steps=None,
+torchdynamo=None,
+tpu_metrics_debug=False,
+tpu_num_cores=None,
+use_cpu=False,
+use_ipex=False,
+use_legacy_prediction_loop=False,
+use_liger_kernel=False,
+use_mps_device=False,
+warmup_ratio=0.0,
+warmup_steps=0,
+weight_decay=0.0,
+)
+README.md: 100%|███████████████████████████████████████████████████████████████████| 10.5k/10.5k [00:00<00:00, 60.2MB/s]
+Generating dataset wikitext (/home/ubuntu/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79df
+dd32d625aee71d232d685c3)
+11/17/2024 00:05:56 - INFO - datasets.builder - Generating dataset wikitext (/home/ubuntu/.cache/huggingface/datasets/wi
+kitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3)
+Downloading and preparing dataset wikitext/wikitext-2-raw-v1 to /home/ubuntu/.cache/huggingface/datasets/wikitext/wikite
+xt-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3...
+11/17/2024 00:05:56 - INFO - datasets.builder - Downloading and preparing dataset wikitext/wikitext-2-raw-v1 to /home/ub
+untu/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3...
+test-00000-of-00001.parquet: 100%|████████████████████████████████████████████████████| 733k/733k [00:00<00:00, 130MB/s]
+train-00000-of-00001.parquet: 100%|█████████████████████████████████████████████████| 6.36M/6.36M [00:00<00:00, 191MB/s]
+validation-00000-of-00001.parquet: 100%|██████████████████████████████████████████████| 657k/657k [00:00<00:00, 254MB/s]
+Downloading took 0.0 min
+11/17/2024 00:05:56 - INFO - datasets.download.download_manager - Downloading took 0.0 min
+Checksum Computation took 0.0 min
+11/17/2024 00:05:56 - INFO - datasets.download.download_manager - Checksum Computation took 0.0 min
+Generating test split
+11/17/2024 00:05:56 - INFO - datasets.builder - Generating test split
+Generating test split: 100%|█████████████████████████████████████████████| 4358/4358 [00:00<00:00, 426675.46 examples/s]
+Generating train split
+11/17/2024 00:05:56 - INFO - datasets.builder - Generating train split
+Generating train split: 100%|██████████████████████████████████████████| 36718/36718 [00:00<00:00, 781369.95 examples/s]
+Generating validation split
+11/17/2024 00:05:56 - INFO - datasets.builder - Generating validation split
+Generating validation split: 100%|███████████████████████████████████████| 3760/3760 [00:00<00:00, 616158.74 examples/s]
+All the splits matched successfully.
+11/17/2024 00:05:56 - INFO - datasets.utils.info_utils - All the splits matched successfully.
+Dataset wikitext downloaded and prepared to /home/ubuntu/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b0
+8601e04326c79dfdd32d625aee71d232d685c3. Subsequent calls will reuse this data.
+11/17/2024 00:05:56 - INFO - datasets.builder - Dataset wikitext downloaded and prepared to /home/ubuntu/.cache/huggingf
+ace/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3. Subsequent calls will reuse this
+ data.
+[INFO|configuration_utils.py:675] 2024-11-17 00:05:56,880 >> loading configuration file config.json from cache at /home/
+ubuntu/.cache/huggingface/hub/models--google--mobilebert-uncased/snapshots/1f90a6c24c7879273a291d34a849033eba2dbc0f/conf
+ig.json
+[INFO|configuration_utils.py:742] 2024-11-17 00:05:56,881 >> Model config MobileBertConfig {
+  "_name_or_path": "google/mobilebert-uncased",
+  "architectures": [
+    "MobileBertForPreTraining"
+  ],
+  "attention_probs_dropout_prob": 0.1,
+  "classifier_activation": false,
+  "classifier_dropout": null,
+  "embedding_size": 128,
+  "hidden_act": "relu",
+  "hidden_dropout_prob": 0.0,
+  "hidden_size": 512,
+  "initializer_range": 0.02,
+  "intermediate_size": 512,
+  "intra_bottleneck_size": 128,
+  "key_query_shared_bottleneck": true,
+  "layer_norm_eps": 1e-12,
+  "max_position_embeddings": 512,
+  "model_type": "mobilebert",
+  "normalization_type": "no_norm",
+  "num_attention_heads": 4,
+  "num_feedforward_networks": 4,
+  "num_hidden_layers": 24,
+  "pad_token_id": 0,
+  "transformers_version": "4.45.2",
+  "trigram_input": true,
+  "true_hidden_size": 128,
+  "type_vocab_size": 2,
+  "use_bottleneck": true,
+  "use_bottleneck_attention": false,
+  "vocab_size": 30522
+}
+
+[INFO|tokenization_auto.py:693] 2024-11-17 00:05:56,916 >> Could not locate the tokenizer configuration file, will try t
+o use the model config instead.
+[INFO|configuration_utils.py:675] 2024-11-17 00:05:56,941 >> loading configuration file config.json from cache at /home/
+ubuntu/.cache/huggingface/hub/models--google--mobilebert-uncased/snapshots/1f90a6c24c7879273a291d34a849033eba2dbc0f/conf
+ig.json
+[INFO|configuration_utils.py:742] 2024-11-17 00:05:56,941 >> Model config MobileBertConfig {
+  "_name_or_path": "google/mobilebert-uncased",
+  "architectures": [
+    "MobileBertForPreTraining"
+  ],
+  "attention_probs_dropout_prob": 0.1,
+  "classifier_activation": false,
+  "classifier_dropout": null,
+  "embedding_size": 128,
+  "hidden_act": "relu",
+  "hidden_dropout_prob": 0.0,
+  "hidden_size": 512,
+  "initializer_range": 0.02,
+  "intermediate_size": 512,
+  "intra_bottleneck_size": 128,
+  "key_query_shared_bottleneck": true,
+  "layer_norm_eps": 1e-12,
+  "max_position_embeddings": 512,
+  "model_type": "mobilebert",
+  "normalization_type": "no_norm",
+  "num_attention_heads": 4,
+  "num_feedforward_networks": 4,
+  "num_hidden_layers": 24,
+  "pad_token_id": 0,
+  "transformers_version": "4.45.2",
+  "trigram_input": true,
+  "true_hidden_size": 128,
+  "type_vocab_size": 2,
+  "use_bottleneck": true,
+  "use_bottleneck_attention": false,
+  "vocab_size": 30522
+}
+
+[INFO|tokenization_utils_base.py:2206] 2024-11-17 00:05:56,994 >> loading file vocab.txt from cache at /home/ubuntu/.cac
+he/huggingface/hub/models--google--mobilebert-uncased/snapshots/1f90a6c24c7879273a291d34a849033eba2dbc0f/vocab.txt
+[INFO|tokenization_utils_base.py:2206] 2024-11-17 00:05:56,994 >> loading file tokenizer.json from cache at /home/ubuntu
+/.cache/huggingface/hub/models--google--mobilebert-uncased/snapshots/1f90a6c24c7879273a291d34a849033eba2dbc0f/tokenizer.
+json
+[INFO|tokenization_utils_base.py:2206] 2024-11-17 00:05:56,994 >> loading file added_tokens.json from cache at None
+[INFO|tokenization_utils_base.py:2206] 2024-11-17 00:05:56,994 >> loading file special_tokens_map.json from cache at Non
+e
+[INFO|tokenization_utils_base.py:2206] 2024-11-17 00:05:56,994 >> loading file tokenizer_config.json from cache at None
+[INFO|configuration_utils.py:675] 2024-11-17 00:05:56,994 >> loading configuration file config.json from cache at /home/
+ubuntu/.cache/huggingface/hub/models--google--mobilebert-uncased/snapshots/1f90a6c24c7879273a291d34a849033eba2dbc0f/conf
+ig.json
+[INFO|configuration_utils.py:742] 2024-11-17 00:05:56,996 >> Model config MobileBertConfig {
+  "_name_or_path": "google/mobilebert-uncased",
+  "architectures": [
+    "MobileBertForPreTraining"
+  ],
+  "attention_probs_dropout_prob": 0.1,
+  "classifier_activation": false,
+  "classifier_dropout": null,
+  "embedding_size": 128,
+  "hidden_act": "relu",
+  "hidden_dropout_prob": 0.0,
+  "hidden_size": 512,
+  "initializer_range": 0.02,
+  "intermediate_size": 512,
+  "intra_bottleneck_size": 128,
+  "key_query_shared_bottleneck": true,
+  "layer_norm_eps": 1e-12,
+  "max_position_embeddings": 512,
+  "model_type": "mobilebert",
+  "normalization_type": "no_norm",
+  "num_attention_heads": 4,
+  "num_feedforward_networks": 4,
+  "num_hidden_layers": 24,
+  "pad_token_id": 0,
+  "transformers_version": "4.45.2",
+  "trigram_input": true,
+  "true_hidden_size": 128,
+  "type_vocab_size": 2,
+  "use_bottleneck": true,
+  "use_bottleneck_attention": false,
+  "vocab_size": 30522
+}
+
+[INFO|modeling_utils.py:3732] 2024-11-17 00:05:57,085 >> loading weights file pytorch_model.bin from cache at /home/ubun
+tu/.cache/huggingface/hub/models--google--mobilebert-uncased/snapshots/1f90a6c24c7879273a291d34a849033eba2dbc0f/pytorch_
+model.bin
+[INFO|modeling_utils.py:4564] 2024-11-17 00:05:58,169 >> Some weights of the model checkpoint at google/mobilebert-uncas
+ed were not used when initializing MobileBertForMaskedLM: ['cls.seq_relationship.bias', 'cls.seq_relationship.weight']
+- This IS expected if you are initializing MobileBertForMaskedLM from the checkpoint of a model trained on another task
+or with another architecture (e.g. initializing a BertForSequenceClassification model from a BertForPreTraining model).
+- This IS NOT expected if you are initializing MobileBertForMaskedLM from the checkpoint of a model that you expect to b
+e exactly identical (initializing a BertForSequenceClassification model from a BertForSequenceClassification model).
+[INFO|modeling_utils.py:4582] 2024-11-17 00:05:58,169 >> All the weights of MobileBertForMaskedLM were initialized from
+the model checkpoint at google/mobilebert-uncased.
+If your task is similar to the task the model of the checkpoint was trained on, you can already use MobileBertForMaskedL
+M for predictions without further training.
+11/17/2024 00:05:58 - WARNING - __main__ - The chosen tokenizer supports a `model_max_length` that is longer than the de
+fault `block_size` value of 1024. If you would like to use a longer `block_size` up to `tokenizer.model_max_length` you
+can override this default with `--block_size xxx`.
+Running tokenizer on every text in dataset:   0%|                                       | 0/4358 [00:00<?, ? examples/s]
+Caching processed dataset at /home/ubuntu/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79df
+dd32d625aee71d232d685c3/cache-f369b1e0f1361ada.arrow
+11/17/2024 00:05:58 - INFO - datasets.arrow_dataset - Caching processed dataset at /home/ubuntu/.cache/huggingface/datas
+ets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3/cache-f369b1e0f1361ada.arrow
+Running tokenizer on every text in dataset: 100%|██████████████████████████| 4358/4358 [00:00<00:00, 6990.19 examples/s]
+Running tokenizer on every text in dataset:   0%|                                      | 0/36718 [00:00<?, ? examples/s]
+Caching processed dataset at /home/ubuntu/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79df
+dd32d625aee71d232d685c3/cache-c3734de2e8d83747.arrow
+11/17/2024 00:05:58 - INFO - datasets.arrow_dataset - Caching processed dataset at /home/ubuntu/.cache/huggingface/datas
+ets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3/cache-c3734de2e8d83747.arrow
+Running tokenizer on every text in dataset: 100%|████████████████████████| 36718/36718 [00:05<00:00, 6367.06 examples/s]
+Running tokenizer on every text in dataset:   0%|                                       | 0/3760 [00:00<?, ? examples/s]
+Caching processed dataset at /home/ubuntu/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79df
+dd32d625aee71d232d685c3/cache-3df9a7efd1b7e68c.arrow
+11/17/2024 00:06:04 - INFO - datasets.arrow_dataset - Caching processed dataset at /home/ubuntu/.cache/huggingface/datas
+ets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3/cache-3df9a7efd1b7e68c.arrow
+Running tokenizer on every text in dataset: 100%|██████████████████████████| 3760/3760 [00:00<00:00, 6925.22 examples/s]
+Grouping texts in chunks of 1024:   0%|                                                 | 0/4358 [00:00<?, ? examples/s]
+Caching processed dataset at /home/ubuntu/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79df
+dd32d625aee71d232d685c3/cache-e7cb699b779b2157.arrow
+11/17/2024 00:06:05 - INFO - datasets.arrow_dataset - Caching processed dataset at /home/ubuntu/.cache/huggingface/datas
+ets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3/cache-e7cb699b779b2157.arrow
+Grouping texts in chunks of 1024: 100%|████████████████████████████████████| 4358/4358 [00:00<00:00, 7377.24 examples/s]
+Grouping texts in chunks of 1024:   0%|                                                | 0/36718 [00:00<?, ? examples/s]
+Caching processed dataset at /home/ubuntu/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79df
+dd32d625aee71d232d685c3/cache-ce13727b52c18f97.arrow
+11/17/2024 00:06:05 - INFO - datasets.arrow_dataset - Caching processed dataset at /home/ubuntu/.cache/huggingface/datas
+ets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3/cache-ce13727b52c18f97.arrow
+Grouping texts in chunks of 1024: 100%|██████████████████████████████████| 36718/36718 [00:05<00:00, 7034.38 examples/s]
+Grouping texts in chunks of 1024:   0%|                                                 | 0/3760 [00:00<?, ? examples/s]
+Caching processed dataset at /home/ubuntu/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79df
+dd32d625aee71d232d685c3/cache-654aba85b1c4ff0a.arrow
+11/17/2024 00:06:11 - INFO - datasets.arrow_dataset - Caching processed dataset at /home/ubuntu/.cache/huggingface/datas
+ets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3/cache-654aba85b1c4ff0a.arrow
+Grouping texts in chunks of 1024: 100%|████████████████████████████████████| 3760/3760 [00:00<00:00, 7146.15 examples/s]
+[INFO|trainer.py:831] 2024-11-17 00:06:12,545 >> The following columns in the training set don't have a corresponding ar
+gument in `MobileBertForMaskedLM.forward` and have been ignored: special_tokens_mask. If special_tokens_mask are not exp
+ected by `MobileBertForMaskedLM.forward`,  you can safely ignore this message.
+[INFO|trainer.py:2243] 2024-11-17 00:06:12,594 >> ***** Running training *****
+[INFO|trainer.py:2244] 2024-11-17 00:06:12,594 >>   Num examples = 2,304
+[INFO|trainer.py:2245] 2024-11-17 00:06:12,594 >>   Num Epochs = 3
+[INFO|trainer.py:2246] 2024-11-17 00:06:12,594 >>   Instantaneous batch size per device = 8
+[INFO|trainer.py:2249] 2024-11-17 00:06:12,594 >>   Total train batch size (w. parallel, distributed & accumulation) = 8
+[INFO|trainer.py:2250] 2024-11-17 00:06:12,594 >>   Gradient Accumulation steps = 1
+[INFO|trainer.py:2251] 2024-11-17 00:06:12,594 >>   Total optimization steps = 864
+[INFO|trainer.py:2252] 2024-11-17 00:06:12,597 >>   Number of trainable parameters = 36,596,538
+  0%|                                                                                           | 0/864 [00:00<?, ?it/s]
+Traceback (most recent call last):
+  File "/home/ubuntu/transformers/examples/pytorch/language-modeling/run_mlm.py", line 691, in <module>
+    main()
+  File "/home/ubuntu/transformers/examples/pytorch/language-modeling/run_mlm.py", line 640, in main
+    train_result = trainer.train(resume_from_checkpoint=checkpoint)
+  File "/home/ubuntu/miniforge3/envs/cs230-proj/lib/python3.10/site-packages/transformers/trainer.py", line 2052, in tra
+in
+    return inner_training_loop(
+  File "/home/ubuntu/miniforge3/envs/cs230-proj/lib/python3.10/site-packages/transformers/trainer.py", line 2388, in _in
+ner_training_loop
+    tr_loss_step = self.training_step(model, inputs)
+  File "/home/ubuntu/miniforge3/envs/cs230-proj/lib/python3.10/site-packages/transformers/trainer.py", line 3485, in tra
+ining_step
+    loss = self.compute_loss(model, inputs)
+  File "/home/ubuntu/miniforge3/envs/cs230-proj/lib/python3.10/site-packages/transformers/trainer.py", line 3532, in com
+pute_loss
+    outputs = model(**inputs)
+  File "/home/ubuntu/miniforge3/envs/cs230-proj/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in
+_wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/ubuntu/miniforge3/envs/cs230-proj/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in
+_call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/ubuntu/miniforge3/envs/cs230-proj/lib/python3.10/site-packages/transformers/models/mobilebert/modeling_mob
+ilebert.py", line 1091, in forward
+    outputs = self.mobilebert(
+  File "/home/ubuntu/miniforge3/envs/cs230-proj/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in
+_wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/ubuntu/miniforge3/envs/cs230-proj/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in
+_call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/ubuntu/miniforge3/envs/cs230-proj/lib/python3.10/site-packages/transformers/models/mobilebert/modeling_mob
+ilebert.py", line 895, in forward
+    embedding_output = self.embeddings(
+  File "/home/ubuntu/miniforge3/envs/cs230-proj/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in
+_wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/ubuntu/miniforge3/envs/cs230-proj/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in
+_call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/ubuntu/miniforge3/envs/cs230-proj/lib/python3.10/site-packages/transformers/models/mobilebert/modeling_mob
+ilebert.py", line 241, in forward
+    embeddings = inputs_embeds + position_embeddings + token_type_embeddings
+RuntimeError: The size of tensor a (1024) must match the size of tensor b (512) at non-singleton dimension 1
+  0%|                                                                                           | 0/864 [00:00<?, ?it/s]
+~/t/e/p/language-modeling ((v4.45.2)|✔) [1]$                                                               (cs230-proj)
+~/t/e/p/language-modeling ((v4.45.2)|✔) [1]$                                                               (cs230-proj)
+~/t/e/p/language-modeling ((v4.45.2)|✔) [1]$ ls                                                            (cs230-proj)
+README.md         run_clm.py             run_fim.py             run_mlm.py             run_plm.py
+requirements.txt  run_clm_no_trainer.py  run_fim_no_trainer.py  run_mlm_no_trainer.py
+~/t/e/p/language-modeling ((v4.45.2)|✔) $ ls /tmp                                                          (cs230-proj)
+snap-private-tmp  ssh-XXXXnD5Y1A                                                                    test-mlm
+ssh-XXXXH7Dc73    systemd-private-f78e717989d44f278cc16b544836a045-chrony.service-KgRmpI            tmpahgzp4w8
+ssh-XXXXNoE5QC    systemd-private-f78e717989d44f278cc16b544836a045-systemd-logind.service-lkGdCI    tmux-1000
+ssh-XXXXUvWzX8    systemd-private-f78e717989d44f278cc16b544836a045-systemd-resolved.service-Ay28yl
+~/t/e/p/language-modeling ((v4.45.2)|✔) $ ls /tmp/test-mlm/                                                (cs230-proj)
+~/t/e/p/language-modeling ((v4.45.2)|✔) $ python run_mlm.py \                                              (cs230-proj)
+                                                  --model_name_or_path google/mobilebert-uncased \
+                                                  --max_seq_length 512 \
+                                                  --dataset_name wikitext \
+                                                  --dataset_config_name wikitext-2-raw-v1 \
+                                                  --per_device_train_batch_size 8 \
+                                                  --per_device_eval_batch_size 8 \
+                                                  --do_train \
+                                                  --do_eval \
+                                                  --output_dir /tmp/test-mlm
+11/17/2024 00:35:15 - WARNING - __main__ - Process rank: 0, device: cuda:0, n_gpu: 1, distributed training: False, 16-bi
+ts training: False
+11/17/2024 00:35:15 - INFO - __main__ - Training/evaluation parameters TrainingArguments(
+_n_gpu=1,
+accelerator_config={'split_batches': False, 'dispatch_batches': None, 'even_batches': True, 'use_seedable_sampler': True
+, 'non_blocking': False, 'gradient_accumulation_kwargs': None, 'use_configured_state': False},
+adafactor=False,
+adam_beta1=0.9,
+adam_beta2=0.999,
+adam_epsilon=1e-08,
+auto_find_batch_size=False,
+batch_eval_metrics=False,
+bf16=False,
+bf16_full_eval=False,
+data_seed=None,
+dataloader_drop_last=False,
+dataloader_num_workers=0,
+dataloader_persistent_workers=False,
+dataloader_pin_memory=True,
+dataloader_prefetch_factor=None,
+ddp_backend=None,
+ddp_broadcast_buffers=None,
+ddp_bucket_cap_mb=None,
+ddp_find_unused_parameters=None,
+ddp_timeout=1800,
+debug=[],
+deepspeed=None,
+disable_tqdm=False,
+dispatch_batches=None,
+do_eval=True,
+do_predict=False,
+do_train=True,
+eval_accumulation_steps=None,
+eval_delay=0,
+eval_do_concat_batches=True,
+eval_on_start=False,
+eval_steps=None,
+eval_strategy=no,
+eval_use_gather_object=False,
+evaluation_strategy=None,
+fp16=False,
+fp16_backend=auto,
+fp16_full_eval=False,
+fp16_opt_level=O1,
+fsdp=[],
+fsdp_config={'min_num_params': 0, 'xla': False, 'xla_fsdp_v2': False, 'xla_fsdp_grad_ckpt': False},
+fsdp_min_num_params=0,
+fsdp_transformer_layer_cls_to_wrap=None,
+full_determinism=False,
+gradient_accumulation_steps=1,
+gradient_checkpointing=False,
+gradient_checkpointing_kwargs=None,
+greater_is_better=None,
+group_by_length=False,
+half_precision_backend=auto,
+hub_always_push=False,
+hub_model_id=None,
+hub_private_repo=False,
+hub_strategy=every_save,
+hub_token=<HUB_TOKEN>,
+ignore_data_skip=False,
+include_inputs_for_metrics=False,
+include_num_input_tokens_seen=False,
+include_tokens_per_second=False,
+jit_mode_eval=False,
+label_names=None,
+label_smoothing_factor=0.0,
+learning_rate=5e-05,
+length_column_name=length,
+load_best_model_at_end=False,
+local_rank=0,
+log_level=passive,
+log_level_replica=warning,
+log_on_each_node=True,
+logging_dir=/tmp/test-mlm/runs/Nov17_00-35-15_ip-172-31-49-156,
+logging_first_step=False,
+logging_nan_inf_filter=True,
+logging_steps=500,
+logging_strategy=steps,
+lr_scheduler_kwargs={},
+lr_scheduler_type=linear,
+max_grad_norm=1.0,
+max_steps=-1,
+metric_for_best_model=None,
+mp_parameters=,
+neftune_noise_alpha=None,
+no_cuda=False,
+num_train_epochs=3.0,
+optim=adamw_torch,
+optim_args=None,
+optim_target_modules=None,
+output_dir=/tmp/test-mlm,
+overwrite_output_dir=False,
+past_index=-1,
+per_device_eval_batch_size=8,
+per_device_train_batch_size=8,
+prediction_loss_only=False,
+push_to_hub=False,
+push_to_hub_model_id=None,
+push_to_hub_organization=None,
+push_to_hub_token=<PUSH_TO_HUB_TOKEN>,
+ray_scope=last,
+remove_unused_columns=True,
+report_to=[],
+restore_callback_states_from_checkpoint=False,
+resume_from_checkpoint=None,
+run_name=/tmp/test-mlm,
+save_on_each_node=False,
+save_only_model=False,
+save_safetensors=True,
+save_steps=500,
+save_strategy=steps,
+save_total_limit=None,
+seed=42,
+skip_memory_metrics=True,
+split_batches=None,
+tf32=None,
+torch_compile=False,
+torch_compile_backend=None,
+torch_compile_mode=None,
+torch_empty_cache_steps=None,
+torchdynamo=None,
+tpu_metrics_debug=False,
+tpu_num_cores=None,
+use_cpu=False,
+use_ipex=False,
+use_legacy_prediction_loop=False,
+use_liger_kernel=False,
+use_mps_device=False,
+warmup_ratio=0.0,
+warmup_steps=0,
+weight_decay=0.0,
+)
+Overwrite dataset info from restored data version if exists.
+11/17/2024 00:35:16 - INFO - datasets.builder - Overwrite dataset info from restored data version if exists.
+Loading Dataset info from /home/ubuntu/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd3
+2d625aee71d232d685c3
+11/17/2024 00:35:16 - INFO - datasets.info - Loading Dataset info from /home/ubuntu/.cache/huggingface/datasets/wikitext
+/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3
+Found cached dataset wikitext (/home/ubuntu/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79
+dfdd32d625aee71d232d685c3)
+11/17/2024 00:35:16 - INFO - datasets.builder - Found cached dataset wikitext (/home/ubuntu/.cache/huggingface/datasets/
+wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3)
+Loading Dataset info from /home/ubuntu/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd3
+2d625aee71d232d685c3
+11/17/2024 00:35:16 - INFO - datasets.info - Loading Dataset info from /home/ubuntu/.cache/huggingface/datasets/wikitext
+/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3
+[INFO|configuration_utils.py:675] 2024-11-17 00:35:16,785 >> loading configuration file config.json from cache at /home/
+ubuntu/.cache/huggingface/hub/models--google--mobilebert-uncased/snapshots/1f90a6c24c7879273a291d34a849033eba2dbc0f/conf
+ig.json
+[INFO|configuration_utils.py:742] 2024-11-17 00:35:16,786 >> Model config MobileBertConfig {
+  "_name_or_path": "google/mobilebert-uncased",
+  "architectures": [
+    "MobileBertForPreTraining"
+  ],
+  "attention_probs_dropout_prob": 0.1,
+  "classifier_activation": false,
+  "classifier_dropout": null,
+  "embedding_size": 128,
+  "hidden_act": "relu",
+  "hidden_dropout_prob": 0.0,
+  "hidden_size": 512,
+  "initializer_range": 0.02,
+  "intermediate_size": 512,
+  "intra_bottleneck_size": 128,
+  "key_query_shared_bottleneck": true,
+  "layer_norm_eps": 1e-12,
+  "max_position_embeddings": 512,
+  "model_type": "mobilebert",
+  "normalization_type": "no_norm",
+  "num_attention_heads": 4,
+  "num_feedforward_networks": 4,
+  "num_hidden_layers": 24,
+  "pad_token_id": 0,
+  "transformers_version": "4.45.2",
+  "trigram_input": true,
+  "true_hidden_size": 128,
+  "type_vocab_size": 2,
+  "use_bottleneck": true,
+  "use_bottleneck_attention": false,
+  "vocab_size": 30522
+}
+
+[INFO|tokenization_auto.py:693] 2024-11-17 00:35:16,806 >> Could not locate the tokenizer configuration file, will try t
+o use the model config instead.
+[INFO|configuration_utils.py:675] 2024-11-17 00:35:16,842 >> loading configuration file config.json from cache at /home/
+ubuntu/.cache/huggingface/hub/models--google--mobilebert-uncased/snapshots/1f90a6c24c7879273a291d34a849033eba2dbc0f/conf
+ig.json
+[INFO|configuration_utils.py:742] 2024-11-17 00:35:16,842 >> Model config MobileBertConfig {
+  "_name_or_path": "google/mobilebert-uncased",
+  "architectures": [
+    "MobileBertForPreTraining"
+  ],
+  "attention_probs_dropout_prob": 0.1,
+  "classifier_activation": false,
+  "classifier_dropout": null,
+  "embedding_size": 128,
+  "hidden_act": "relu",
+  "hidden_dropout_prob": 0.0,
+  "hidden_size": 512,
+  "initializer_range": 0.02,
+  "intermediate_size": 512,
+  "intra_bottleneck_size": 128,
+  "key_query_shared_bottleneck": true,
+  "layer_norm_eps": 1e-12,
+  "max_position_embeddings": 512,
+  "model_type": "mobilebert",
+  "normalization_type": "no_norm",
+  "num_attention_heads": 4,
+  "num_feedforward_networks": 4,
+  "num_hidden_layers": 24,
+  "pad_token_id": 0,
+  "transformers_version": "4.45.2",
+  "trigram_input": true,
+  "true_hidden_size": 128,
+  "type_vocab_size": 2,
+  "use_bottleneck": true,
+  "use_bottleneck_attention": false,
+  "vocab_size": 30522
+}
+
+[INFO|tokenization_utils_base.py:2206] 2024-11-17 00:35:16,880 >> loading file vocab.txt from cache at /home/ubuntu/.cac
+he/huggingface/hub/models--google--mobilebert-uncased/snapshots/1f90a6c24c7879273a291d34a849033eba2dbc0f/vocab.txt
+[INFO|tokenization_utils_base.py:2206] 2024-11-17 00:35:16,880 >> loading file tokenizer.json from cache at /home/ubuntu
+/.cache/huggingface/hub/models--google--mobilebert-uncased/snapshots/1f90a6c24c7879273a291d34a849033eba2dbc0f/tokenizer.
+json
+[INFO|tokenization_utils_base.py:2206] 2024-11-17 00:35:16,880 >> loading file added_tokens.json from cache at None
+[INFO|tokenization_utils_base.py:2206] 2024-11-17 00:35:16,880 >> loading file special_tokens_map.json from cache at Non
+e
+[INFO|tokenization_utils_base.py:2206] 2024-11-17 00:35:16,880 >> loading file tokenizer_config.json from cache at None
+[INFO|configuration_utils.py:675] 2024-11-17 00:35:16,880 >> loading configuration file config.json from cache at /home/
+ubuntu/.cache/huggingface/hub/models--google--mobilebert-uncased/snapshots/1f90a6c24c7879273a291d34a849033eba2dbc0f/conf
+ig.json
+[INFO|configuration_utils.py:742] 2024-11-17 00:35:16,881 >> Model config MobileBertConfig {
+  "_name_or_path": "google/mobilebert-uncased",
+  "architectures": [
+    "MobileBertForPreTraining"
+  ],
+  "attention_probs_dropout_prob": 0.1,
+  "classifier_activation": false,
+  "classifier_dropout": null,
+  "embedding_size": 128,
+  "hidden_act": "relu",
+  "hidden_dropout_prob": 0.0,
+  "hidden_size": 512,
+  "initializer_range": 0.02,
+  "intermediate_size": 512,
+  "intra_bottleneck_size": 128,
+  "key_query_shared_bottleneck": true,
+  "layer_norm_eps": 1e-12,
+  "max_position_embeddings": 512,
+  "model_type": "mobilebert",
+  "normalization_type": "no_norm",
+  "num_attention_heads": 4,
+  "num_feedforward_networks": 4,
+  "num_hidden_layers": 24,
+  "pad_token_id": 0,
+  "transformers_version": "4.45.2",
+  "trigram_input": true,
+  "true_hidden_size": 128,
+  "type_vocab_size": 2,
+  "use_bottleneck": true,
+  "use_bottleneck_attention": false,
+  "vocab_size": 30522
+}
+
+[INFO|modeling_utils.py:3732] 2024-11-17 00:35:16,972 >> loading weights file pytorch_model.bin from cache at /home/ubun
+tu/.cache/huggingface/hub/models--google--mobilebert-uncased/snapshots/1f90a6c24c7879273a291d34a849033eba2dbc0f/pytorch_
+model.bin
+[INFO|modeling_utils.py:4564] 2024-11-17 00:35:17,923 >> Some weights of the model checkpoint at google/mobilebert-uncas
+ed were not used when initializing MobileBertForMaskedLM: ['cls.seq_relationship.bias', 'cls.seq_relationship.weight']
+- This IS expected if you are initializing MobileBertForMaskedLM from the checkpoint of a model trained on another task
+or with another architecture (e.g. initializing a BertForSequenceClassification model from a BertForPreTraining model).
+- This IS NOT expected if you are initializing MobileBertForMaskedLM from the checkpoint of a model that you expect to b
+e exactly identical (initializing a BertForSequenceClassification model from a BertForSequenceClassification model).
+[INFO|modeling_utils.py:4582] 2024-11-17 00:35:17,923 >> All the weights of MobileBertForMaskedLM were initialized from
+the model checkpoint at google/mobilebert-uncased.
+If your task is similar to the task the model of the checkpoint was trained on, you can already use MobileBertForMaskedL
+M for predictions without further training.
+Loading cached processed dataset at /home/ubuntu/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e043
+26c79dfdd32d625aee71d232d685c3/cache-f369b1e0f1361ada.arrow
+11/17/2024 00:35:17 - INFO - datasets.arrow_dataset - Loading cached processed dataset at /home/ubuntu/.cache/huggingfac
+e/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3/cache-f369b1e0f1361ada.arrow
+Loading cached processed dataset at /home/ubuntu/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e043
+26c79dfdd32d625aee71d232d685c3/cache-c3734de2e8d83747.arrow
+11/17/2024 00:35:17 - INFO - datasets.arrow_dataset - Loading cached processed dataset at /home/ubuntu/.cache/huggingfac
+e/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3/cache-c3734de2e8d83747.arrow
+Loading cached processed dataset at /home/ubuntu/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e043
+26c79dfdd32d625aee71d232d685c3/cache-3df9a7efd1b7e68c.arrow
+11/17/2024 00:35:17 - INFO - datasets.arrow_dataset - Loading cached processed dataset at /home/ubuntu/.cache/huggingfac
+e/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3/cache-3df9a7efd1b7e68c.arrow
+Grouping texts in chunks of 512:   0%|                                                  | 0/4358 [00:00<?, ? examples/s]
+Caching processed dataset at /home/ubuntu/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79df
+dd32d625aee71d232d685c3/cache-4ff9bdf953eca07b.arrow
+11/17/2024 00:35:18 - INFO - datasets.arrow_dataset - Caching processed dataset at /home/ubuntu/.cache/huggingface/datas
+ets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3/cache-4ff9bdf953eca07b.arrow
+Grouping texts in chunks of 512: 100%|█████████████████████████████████████| 4358/4358 [00:00<00:00, 7561.76 examples/s]
+Grouping texts in chunks of 512:   0%|                                                 | 0/36718 [00:00<?, ? examples/s]
+Caching processed dataset at /home/ubuntu/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79df
+dd32d625aee71d232d685c3/cache-adb2a76e0c47f093.arrow
+11/17/2024 00:35:18 - INFO - datasets.arrow_dataset - Caching processed dataset at /home/ubuntu/.cache/huggingface/datas
+ets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3/cache-adb2a76e0c47f093.arrow
+Grouping texts in chunks of 512: 100%|███████████████████████████████████| 36718/36718 [00:04<00:00, 7705.59 examples/s]
+Grouping texts in chunks of 512:   0%|                                                  | 0/3760 [00:00<?, ? examples/s]
+Caching processed dataset at /home/ubuntu/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79df
+dd32d625aee71d232d685c3/cache-3af43209cfc3691d.arrow
+11/17/2024 00:35:23 - INFO - datasets.arrow_dataset - Caching processed dataset at /home/ubuntu/.cache/huggingface/datas
+ets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3/cache-3af43209cfc3691d.arrow
+Grouping texts in chunks of 512: 100%|█████████████████████████████████████| 3760/3760 [00:00<00:00, 7563.94 examples/s]
+[INFO|trainer.py:831] 2024-11-17 00:35:24,385 >> The following columns in the training set don't have a corresponding ar
+gument in `MobileBertForMaskedLM.forward` and have been ignored: special_tokens_mask. If special_tokens_mask are not exp
+ected by `MobileBertForMaskedLM.forward`,  you can safely ignore this message.
+[INFO|trainer.py:2243] 2024-11-17 00:35:24,432 >> ***** Running training *****
+[INFO|trainer.py:2244] 2024-11-17 00:35:24,432 >>   Num examples = 4,627
+[INFO|trainer.py:2245] 2024-11-17 00:35:24,432 >>   Num Epochs = 3
+[INFO|trainer.py:2246] 2024-11-17 00:35:24,432 >>   Instantaneous batch size per device = 8
+[INFO|trainer.py:2249] 2024-11-17 00:35:24,432 >>   Total train batch size (w. parallel, distributed & accumulation) = 8
+[INFO|trainer.py:2250] 2024-11-17 00:35:24,432 >>   Gradient Accumulation steps = 1
+[INFO|trainer.py:2251] 2024-11-17 00:35:24,432 >>   Total optimization steps = 1,737
+[INFO|trainer.py:2252] 2024-11-17 00:35:24,435 >>   Number of trainable parameters = 36,596,538
+  0%|                                                                                          | 0/1737 [00:00<?, ?it/s]
+Traceback (most recent call last):
+  File "/home/ubuntu/transformers/examples/pytorch/language-modeling/run_mlm.py", line 691, in <module>
+    main()
+  File "/home/ubuntu/transformers/examples/pytorch/language-modeling/run_mlm.py", line 640, in main
+    train_result = trainer.train(resume_from_checkpoint=checkpoint)
+  File "/home/ubuntu/miniforge3/envs/cs230-proj/lib/python3.10/site-packages/transformers/trainer.py", line 2052, in tra
+in
+    return inner_training_loop(
+  File "/home/ubuntu/miniforge3/envs/cs230-proj/lib/python3.10/site-packages/transformers/trainer.py", line 2388, in _in
+ner_training_loop
+    tr_loss_step = self.training_step(model, inputs)
+  File "/home/ubuntu/miniforge3/envs/cs230-proj/lib/python3.10/site-packages/transformers/trainer.py", line 3485, in tra
+ining_step
+    loss = self.compute_loss(model, inputs)
+  File "/home/ubuntu/miniforge3/envs/cs230-proj/lib/python3.10/site-packages/transformers/trainer.py", line 3532, in com
+pute_loss
+    outputs = model(**inputs)
+  File "/home/ubuntu/miniforge3/envs/cs230-proj/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in
+_wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/ubuntu/miniforge3/envs/cs230-proj/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in
+_call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/ubuntu/miniforge3/envs/cs230-proj/lib/python3.10/site-packages/transformers/models/mobilebert/modeling_mob
+ilebert.py", line 1091, in forward
+    outputs = self.mobilebert(
+  File "/home/ubuntu/miniforge3/envs/cs230-proj/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in
+_wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/ubuntu/miniforge3/envs/cs230-proj/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in
+_call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/ubuntu/miniforge3/envs/cs230-proj/lib/python3.10/site-packages/transformers/models/mobilebert/modeling_mob
+ilebert.py", line 898, in forward
+    encoder_outputs = self.encoder(
+  File "/home/ubuntu/miniforge3/envs/cs230-proj/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in
+_wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/ubuntu/miniforge3/envs/cs230-proj/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in
+_call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/ubuntu/miniforge3/envs/cs230-proj/lib/python3.10/site-packages/transformers/models/mobilebert/modeling_mob
+ilebert.py", line 580, in forward
+    layer_outputs = layer_module(
+  File "/home/ubuntu/miniforge3/envs/cs230-proj/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in
+_wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/ubuntu/miniforge3/envs/cs230-proj/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in
+_call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/ubuntu/miniforge3/envs/cs230-proj/lib/python3.10/site-packages/transformers/models/mobilebert/modeling_mob
+ilebert.py", line 523, in forward
+    self_attention_outputs = self.attention(
+  File "/home/ubuntu/miniforge3/envs/cs230-proj/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in
+_wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/ubuntu/miniforge3/envs/cs230-proj/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in
+_call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/ubuntu/miniforge3/envs/cs230-proj/lib/python3.10/site-packages/transformers/models/mobilebert/modeling_mob
+ilebert.py", line 357, in forward
+    self_outputs = self.self(
+  File "/home/ubuntu/miniforge3/envs/cs230-proj/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in
+_wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/ubuntu/miniforge3/envs/cs230-proj/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in
+_call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/ubuntu/miniforge3/envs/cs230-proj/lib/python3.10/site-packages/transformers/models/mobilebert/modeling_mob
+ilebert.py", line 285, in forward
+    attention_scores = attention_scores / math.sqrt(self.attention_head_size)
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 32.00 MiB. GPU 0 has a total capacity of 14.57 GiB of whic
+h 30.75 MiB is free. Process 2017 has 12.07 GiB memory in use. Including non-PyTorch memory, this process has 2.47 GiB m
+emory in use. Of the allocated memory 2.32 GiB is allocated by PyTorch, and 22.12 MiB is reserved by PyTorch but unalloc
+ated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid
+fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-va
+riables)
+  0%|                                                                                          | 0/1737 [00:00<?, ?it/s]
+~/t/e/p/language-modeling ((v4.45.2)|✔) [1]$ nvidia-smi                                                    (cs230-proj)
+Sun Nov 17 00:35:31 2024
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 550.90.07              Driver Version: 550.90.07      CUDA Version: 12.4     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  Tesla T4                       On  |   00000000:00:1E.0 Off |                    0 |
+| N/A   32C    P0             32W /   70W |   12361MiB /  15360MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI        PID   Type   Process name                              GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|    0   N/A  N/A      2017      C   ...niforge3/envs/cs230-proj/bin/python      12358MiB |
++-----------------------------------------------------------------------------------------+
+~/t/e/p/language-modeling ((v4.45.2)|✔) $ nvidia-smi                                                       (cs230-proj)
+Sun Nov 17 00:36:44 2024
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 550.90.07              Driver Version: 550.90.07      CUDA Version: 12.4     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  Tesla T4                       On  |   00000000:00:1E.0 Off |                    0 |
+| N/A   30C    P8             11W /   70W |       1MiB /  15360MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI        PID   Type   Process name                              GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+~/t/e/p/language-modeling ((v4.45.2)|✔) $ python run_mlm.py \                                              (cs230-proj)
+                                                  --model_name_or_path google/mobilebert-uncased \
+                                                  --max_seq_length 512 \
+                                                  --dataset_name wikitext \
+                                                  --dataset_config_name wikitext-2-raw-v1 \
+                                                  --per_device_train_batch_size 8 \
+                                                  --per_device_eval_batch_size 8 \
+                                                  --do_train \
+                                                  --do_eval \
+                                                  --output_dir /tmp/test-mlm
+11/17/2024 00:36:59 - WARNING - __main__ - Process rank: 0, device: cuda:0, n_gpu: 1, distributed training: False, 16-bi
+ts training: False
+11/17/2024 00:36:59 - INFO - __main__ - Training/evaluation parameters TrainingArguments(
+_n_gpu=1,
+accelerator_config={'split_batches': False, 'dispatch_batches': None, 'even_batches': True, 'use_seedable_sampler': True
+, 'non_blocking': False, 'gradient_accumulation_kwargs': None, 'use_configured_state': False},
+adafactor=False,
+adam_beta1=0.9,
+adam_beta2=0.999,
+adam_epsilon=1e-08,
+auto_find_batch_size=False,
+batch_eval_metrics=False,
+bf16=False,
+bf16_full_eval=False,
+data_seed=None,
+dataloader_drop_last=False,
+dataloader_num_workers=0,
+dataloader_persistent_workers=False,
+dataloader_pin_memory=True,
+dataloader_prefetch_factor=None,
+ddp_backend=None,
+ddp_broadcast_buffers=None,
+ddp_bucket_cap_mb=None,
+ddp_find_unused_parameters=None,
+ddp_timeout=1800,
+debug=[],
+deepspeed=None,
+disable_tqdm=False,
+dispatch_batches=None,
+do_eval=True,
+do_predict=False,
+do_train=True,
+eval_accumulation_steps=None,
+eval_delay=0,
+eval_do_concat_batches=True,
+eval_on_start=False,
+eval_steps=None,
+eval_strategy=no,
+eval_use_gather_object=False,
+evaluation_strategy=None,
+fp16=False,
+fp16_backend=auto,
+fp16_full_eval=False,
+fp16_opt_level=O1,
+fsdp=[],
+fsdp_config={'min_num_params': 0, 'xla': False, 'xla_fsdp_v2': False, 'xla_fsdp_grad_ckpt': False},
+fsdp_min_num_params=0,
+fsdp_transformer_layer_cls_to_wrap=None,
+full_determinism=False,
+gradient_accumulation_steps=1,
+gradient_checkpointing=False,
+gradient_checkpointing_kwargs=None,
+greater_is_better=None,
+group_by_length=False,
+half_precision_backend=auto,
+hub_always_push=False,
+hub_model_id=None,
+hub_private_repo=False,
+hub_strategy=every_save,
+hub_token=<HUB_TOKEN>,
+ignore_data_skip=False,
+include_inputs_for_metrics=False,
+include_num_input_tokens_seen=False,
+include_tokens_per_second=False,
+jit_mode_eval=False,
+label_names=None,
+label_smoothing_factor=0.0,
+learning_rate=5e-05,
+length_column_name=length,
+load_best_model_at_end=False,
+local_rank=0,
+log_level=passive,
+log_level_replica=warning,
+log_on_each_node=True,
+logging_dir=/tmp/test-mlm/runs/Nov17_00-36-59_ip-172-31-49-156,
+logging_first_step=False,
+logging_nan_inf_filter=True,
+logging_steps=500,
+logging_strategy=steps,
+lr_scheduler_kwargs={},
+lr_scheduler_type=linear,
+max_grad_norm=1.0,
+max_steps=-1,
+metric_for_best_model=None,
+mp_parameters=,
+neftune_noise_alpha=None,
+no_cuda=False,
+num_train_epochs=3.0,
+optim=adamw_torch,
+optim_args=None,
+optim_target_modules=None,
+output_dir=/tmp/test-mlm,
+overwrite_output_dir=False,
+past_index=-1,
+per_device_eval_batch_size=8,
+per_device_train_batch_size=8,
+prediction_loss_only=False,
+push_to_hub=False,
+push_to_hub_model_id=None,
+push_to_hub_organization=None,
+push_to_hub_token=<PUSH_TO_HUB_TOKEN>,
+ray_scope=last,
+remove_unused_columns=True,
+report_to=[],
+restore_callback_states_from_checkpoint=False,
+resume_from_checkpoint=None,
+run_name=/tmp/test-mlm,
+save_on_each_node=False,
+save_only_model=False,
+save_safetensors=True,
+save_steps=500,
+save_strategy=steps,
+save_total_limit=None,
+seed=42,
+skip_memory_metrics=True,
+split_batches=None,
+tf32=None,
+torch_compile=False,
+torch_compile_backend=None,
+torch_compile_mode=None,
+torch_empty_cache_steps=None,
+torchdynamo=None,
+tpu_metrics_debug=False,
+tpu_num_cores=None,
+use_cpu=False,
+use_ipex=False,
+use_legacy_prediction_loop=False,
+use_liger_kernel=False,
+use_mps_device=False,
+warmup_ratio=0.0,
+warmup_steps=0,
+weight_decay=0.0,
+)
+Overwrite dataset info from restored data version if exists.
+11/17/2024 00:37:00 - INFO - datasets.builder - Overwrite dataset info from restored data version if exists.
+Loading Dataset info from /home/ubuntu/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd3
+2d625aee71d232d685c3
+11/17/2024 00:37:00 - INFO - datasets.info - Loading Dataset info from /home/ubuntu/.cache/huggingface/datasets/wikitext
+/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3
+Found cached dataset wikitext (/home/ubuntu/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79
+dfdd32d625aee71d232d685c3)
+11/17/2024 00:37:00 - INFO - datasets.builder - Found cached dataset wikitext (/home/ubuntu/.cache/huggingface/datasets/
+wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3)
+Loading Dataset info from /home/ubuntu/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd3
+2d625aee71d232d685c3
+11/17/2024 00:37:00 - INFO - datasets.info - Loading Dataset info from /home/ubuntu/.cache/huggingface/datasets/wikitext
+/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3
+[INFO|configuration_utils.py:675] 2024-11-17 00:37:00,776 >> loading configuration file config.json from cache at /home/
+ubuntu/.cache/huggingface/hub/models--google--mobilebert-uncased/snapshots/1f90a6c24c7879273a291d34a849033eba2dbc0f/conf
+ig.json
+[INFO|configuration_utils.py:742] 2024-11-17 00:37:00,777 >> Model config MobileBertConfig {
+  "_name_or_path": "google/mobilebert-uncased",
+  "architectures": [
+    "MobileBertForPreTraining"
+  ],
+  "attention_probs_dropout_prob": 0.1,
+  "classifier_activation": false,
+  "classifier_dropout": null,
+  "embedding_size": 128,
+  "hidden_act": "relu",
+  "hidden_dropout_prob": 0.0,
+  "hidden_size": 512,
+  "initializer_range": 0.02,
+  "intermediate_size": 512,
+  "intra_bottleneck_size": 128,
+  "key_query_shared_bottleneck": true,
+  "layer_norm_eps": 1e-12,
+  "max_position_embeddings": 512,
+  "model_type": "mobilebert",
+  "normalization_type": "no_norm",
+  "num_attention_heads": 4,
+  "num_feedforward_networks": 4,
+  "num_hidden_layers": 24,
+  "pad_token_id": 0,
+  "transformers_version": "4.45.2",
+  "trigram_input": true,
+  "true_hidden_size": 128,
+  "type_vocab_size": 2,
+  "use_bottleneck": true,
+  "use_bottleneck_attention": false,
+  "vocab_size": 30522
+}
+
+[INFO|tokenization_auto.py:693] 2024-11-17 00:37:00,792 >> Could not locate the tokenizer configuration file, will try t
+o use the model config instead.
+[INFO|configuration_utils.py:675] 2024-11-17 00:37:00,808 >> loading configuration file config.json from cache at /home/
+ubuntu/.cache/huggingface/hub/models--google--mobilebert-uncased/snapshots/1f90a6c24c7879273a291d34a849033eba2dbc0f/conf
+ig.json
+[INFO|configuration_utils.py:742] 2024-11-17 00:37:00,808 >> Model config MobileBertConfig {
+  "_name_or_path": "google/mobilebert-uncased",
+  "architectures": [
+    "MobileBertForPreTraining"
+  ],
+  "attention_probs_dropout_prob": 0.1,
+  "classifier_activation": false,
+  "classifier_dropout": null,
+  "embedding_size": 128,
+  "hidden_act": "relu",
+  "hidden_dropout_prob": 0.0,
+  "hidden_size": 512,
+  "initializer_range": 0.02,
+  "intermediate_size": 512,
+  "intra_bottleneck_size": 128,
+  "key_query_shared_bottleneck": true,
+  "layer_norm_eps": 1e-12,
+  "max_position_embeddings": 512,
+  "model_type": "mobilebert",
+  "normalization_type": "no_norm",
+  "num_attention_heads": 4,
+  "num_feedforward_networks": 4,
+  "num_hidden_layers": 24,
+  "pad_token_id": 0,
+  "transformers_version": "4.45.2",
+  "trigram_input": true,
+  "true_hidden_size": 128,
+  "type_vocab_size": 2,
+  "use_bottleneck": true,
+  "use_bottleneck_attention": false,
+  "vocab_size": 30522
+}
+
+[INFO|tokenization_utils_base.py:2206] 2024-11-17 00:37:00,849 >> loading file vocab.txt from cache at /home/ubuntu/.cac
+he/huggingface/hub/models--google--mobilebert-uncased/snapshots/1f90a6c24c7879273a291d34a849033eba2dbc0f/vocab.txt
+[INFO|tokenization_utils_base.py:2206] 2024-11-17 00:37:00,849 >> loading file tokenizer.json from cache at /home/ubuntu
+/.cache/huggingface/hub/models--google--mobilebert-uncased/snapshots/1f90a6c24c7879273a291d34a849033eba2dbc0f/tokenizer.
+json
+[INFO|tokenization_utils_base.py:2206] 2024-11-17 00:37:00,849 >> loading file added_tokens.json from cache at None
+[INFO|tokenization_utils_base.py:2206] 2024-11-17 00:37:00,849 >> loading file special_tokens_map.json from cache at Non
+e
+[INFO|tokenization_utils_base.py:2206] 2024-11-17 00:37:00,849 >> loading file tokenizer_config.json from cache at None
+[INFO|configuration_utils.py:675] 2024-11-17 00:37:00,849 >> loading configuration file config.json from cache at /home/
+ubuntu/.cache/huggingface/hub/models--google--mobilebert-uncased/snapshots/1f90a6c24c7879273a291d34a849033eba2dbc0f/conf
+ig.json
+[INFO|configuration_utils.py:742] 2024-11-17 00:37:00,850 >> Model config MobileBertConfig {
+  "_name_or_path": "google/mobilebert-uncased",
+  "architectures": [
+    "MobileBertForPreTraining"
+  ],
+  "attention_probs_dropout_prob": 0.1,
+  "classifier_activation": false,
+  "classifier_dropout": null,
+  "embedding_size": 128,
+  "hidden_act": "relu",
+  "hidden_dropout_prob": 0.0,
+  "hidden_size": 512,
+  "initializer_range": 0.02,
+  "intermediate_size": 512,
+  "intra_bottleneck_size": 128,
+  "key_query_shared_bottleneck": true,
+  "layer_norm_eps": 1e-12,
+  "max_position_embeddings": 512,
+  "model_type": "mobilebert",
+  "normalization_type": "no_norm",
+  "num_attention_heads": 4,
+  "num_feedforward_networks": 4,
+  "num_hidden_layers": 24,
+  "pad_token_id": 0,
+  "transformers_version": "4.45.2",
+  "trigram_input": true,
+  "true_hidden_size": 128,
+  "type_vocab_size": 2,
+  "use_bottleneck": true,
+  "use_bottleneck_attention": false,
+  "vocab_size": 30522
+}
+
+[INFO|modeling_utils.py:3732] 2024-11-17 00:37:00,942 >> loading weights file pytorch_model.bin from cache at /home/ubun
+tu/.cache/huggingface/hub/models--google--mobilebert-uncased/snapshots/1f90a6c24c7879273a291d34a849033eba2dbc0f/pytorch_
+model.bin
+[INFO|modeling_utils.py:4564] 2024-11-17 00:37:01,883 >> Some weights of the model checkpoint at google/mobilebert-uncas
+ed were not used when initializing MobileBertForMaskedLM: ['cls.seq_relationship.bias', 'cls.seq_relationship.weight']
+- This IS expected if you are initializing MobileBertForMaskedLM from the checkpoint of a model trained on another task
+or with another architecture (e.g. initializing a BertForSequenceClassification model from a BertForPreTraining model).
+- This IS NOT expected if you are initializing MobileBertForMaskedLM from the checkpoint of a model that you expect to b
+e exactly identical (initializing a BertForSequenceClassification model from a BertForSequenceClassification model).
+[INFO|modeling_utils.py:4582] 2024-11-17 00:37:01,883 >> All the weights of MobileBertForMaskedLM were initialized from
+the model checkpoint at google/mobilebert-uncased.
+If your task is similar to the task the model of the checkpoint was trained on, you can already use MobileBertForMaskedL
+M for predictions without further training.
+Loading cached processed dataset at /home/ubuntu/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e043
+26c79dfdd32d625aee71d232d685c3/cache-f369b1e0f1361ada.arrow
+11/17/2024 00:37:01 - INFO - datasets.arrow_dataset - Loading cached processed dataset at /home/ubuntu/.cache/huggingfac
+e/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3/cache-f369b1e0f1361ada.arrow
+Loading cached processed dataset at /home/ubuntu/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e043
+26c79dfdd32d625aee71d232d685c3/cache-c3734de2e8d83747.arrow
+11/17/2024 00:37:01 - INFO - datasets.arrow_dataset - Loading cached processed dataset at /home/ubuntu/.cache/huggingfac
+e/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3/cache-c3734de2e8d83747.arrow
+Loading cached processed dataset at /home/ubuntu/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e043
+26c79dfdd32d625aee71d232d685c3/cache-3df9a7efd1b7e68c.arrow
+11/17/2024 00:37:01 - INFO - datasets.arrow_dataset - Loading cached processed dataset at /home/ubuntu/.cache/huggingfac
+e/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3/cache-3df9a7efd1b7e68c.arrow
+Loading cached processed dataset at /home/ubuntu/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e043
+26c79dfdd32d625aee71d232d685c3/cache-4ff9bdf953eca07b.arrow
+11/17/2024 00:37:01 - INFO - datasets.arrow_dataset - Loading cached processed dataset at /home/ubuntu/.cache/huggingfac
+e/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3/cache-4ff9bdf953eca07b.arrow
+Loading cached processed dataset at /home/ubuntu/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e043
+26c79dfdd32d625aee71d232d685c3/cache-adb2a76e0c47f093.arrow
+11/17/2024 00:37:01 - INFO - datasets.arrow_dataset - Loading cached processed dataset at /home/ubuntu/.cache/huggingfac
+e/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3/cache-adb2a76e0c47f093.arrow
+Loading cached processed dataset at /home/ubuntu/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e043
+26c79dfdd32d625aee71d232d685c3/cache-3af43209cfc3691d.arrow
+11/17/2024 00:37:01 - INFO - datasets.arrow_dataset - Loading cached processed dataset at /home/ubuntu/.cache/huggingfac
+e/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3/cache-3af43209cfc3691d.arrow
+[INFO|trainer.py:831] 2024-11-17 00:37:02,405 >> The following columns in the training set don't have a corresponding ar
+gument in `MobileBertForMaskedLM.forward` and have been ignored: special_tokens_mask. If special_tokens_mask are not exp
+ected by `MobileBertForMaskedLM.forward`,  you can safely ignore this message.
+[INFO|trainer.py:2243] 2024-11-17 00:37:02,451 >> ***** Running training *****
+[INFO|trainer.py:2244] 2024-11-17 00:37:02,451 >>   Num examples = 4,627
+[INFO|trainer.py:2245] 2024-11-17 00:37:02,451 >>   Num Epochs = 3
+[INFO|trainer.py:2246] 2024-11-17 00:37:02,452 >>   Instantaneous batch size per device = 8
+[INFO|trainer.py:2249] 2024-11-17 00:37:02,452 >>   Total train batch size (w. parallel, distributed & accumulation) = 8
+[INFO|trainer.py:2250] 2024-11-17 00:37:02,452 >>   Gradient Accumulation steps = 1
+[INFO|trainer.py:2251] 2024-11-17 00:37:02,452 >>   Total optimization steps = 1,737
+[INFO|trainer.py:2252] 2024-11-17 00:37:02,455 >>   Number of trainable parameters = 36,596,538
+{'loss': 1.7666, 'grad_norm': 4.004256725311279, 'learning_rate': 3.5607369027058145e-05, 'epoch': 0.86}
+ 29%|███████████████████████                                                         | 500/1737 [03:40<09:05,  2.27it/s]
+[INFO|trainer.py:3705] 2024-11-17 00:40:42,576 >> Saving model checkpoint to /tmp/test-mlm/checkpoint-500
+[INFO|configuration_utils.py:410] 2024-11-17 00:40:42,578 >> Configuration saved in /tmp/test-mlm/checkpoint-500/config.
+json
+[INFO|modeling_utils.py:2836] 2024-11-17 00:40:42,936 >> Model weights saved in /tmp/test-mlm/checkpoint-500/model.safet
+ensors
+[INFO|tokenization_utils_base.py:2641] 2024-11-17 00:40:42,938 >> tokenizer config file saved in /tmp/test-mlm/checkpoin
+t-500/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2650] 2024-11-17 00:40:42,938 >> Special tokens file saved in /tmp/test-mlm/checkpoint-
+500/special_tokens_map.json
+{'loss': 1.6689, 'grad_norm': 3.6179723739624023, 'learning_rate': 2.1214738054116294e-05, 'epoch': 1.73}
+ 58%|█████████████████████████████████████████████▍                                 | 1000/1737 [07:20<05:27,  2.25it/s]
+[INFO|trainer.py:3705] 2024-11-17 00:44:23,392 >> Saving model checkpoint to /tmp/test-mlm/checkpoint-1000
+[INFO|configuration_utils.py:410] 2024-11-17 00:44:23,394 >> Configuration saved in /tmp/test-mlm/checkpoint-1000/config
+.json
+[INFO|modeling_utils.py:2836] 2024-11-17 00:44:23,801 >> Model weights saved in /tmp/test-mlm/checkpoint-1000/model.safe
+tensors
+[INFO|tokenization_utils_base.py:2641] 2024-11-17 00:44:23,803 >> tokenizer config file saved in /tmp/test-mlm/checkpoin
+t-1000/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2650] 2024-11-17 00:44:23,803 >> Special tokens file saved in /tmp/test-mlm/checkpoint-
+1000/special_tokens_map.json
+{'loss': 1.6397, 'grad_norm': 3.7717254161834717, 'learning_rate': 6.822107081174439e-06, 'epoch': 2.59}
+ 86%|████████████████████████████████████████████████████████████████████▏          | 1500/1737 [11:03<01:44,  2.26it/s]
+[INFO|trainer.py:3705] 2024-11-17 00:48:05,494 >> Saving model checkpoint to /tmp/test-mlm/checkpoint-1500
+[INFO|configuration_utils.py:410] 2024-11-17 00:48:05,496 >> Configuration saved in /tmp/test-mlm/checkpoint-1500/config
+.json
+[INFO|modeling_utils.py:2836] 2024-11-17 00:48:05,853 >> Model weights saved in /tmp/test-mlm/checkpoint-1500/model.safe
+tensors
+[INFO|tokenization_utils_base.py:2641] 2024-11-17 00:48:05,855 >> tokenizer config file saved in /tmp/test-mlm/checkpoin
+t-1500/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2650] 2024-11-17 00:48:05,855 >> Special tokens file saved in /tmp/test-mlm/checkpoint-
+1500/special_tokens_map.json
+100%|███████████████████████████████████████████████████████████████████████████████| 1737/1737 [12:49<00:00,  2.62it/s]
+[INFO|trainer.py:3705] 2024-11-17 00:49:51,915 >> Saving model checkpoint to /tmp/test-mlm/checkpoint-1737
+[INFO|configuration_utils.py:410] 2024-11-17 00:49:51,916 >> Configuration saved in /tmp/test-mlm/checkpoint-1737/config
+.json
+[INFO|modeling_utils.py:2836] 2024-11-17 00:49:52,313 >> Model weights saved in /tmp/test-mlm/checkpoint-1737/model.safe
+tensors
+[INFO|tokenization_utils_base.py:2641] 2024-11-17 00:49:52,315 >> tokenizer config file saved in /tmp/test-mlm/checkpoin
+t-1737/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2650] 2024-11-17 00:49:52,316 >> Special tokens file saved in /tmp/test-mlm/checkpoint-
+1737/special_tokens_map.json
+[INFO|trainer.py:2505] 2024-11-17 00:49:52,904 >>
+
+Training completed. Do not forget to share your model on huggingface.co/models =)
+
+
+{'train_runtime': 770.45, 'train_samples_per_second': 18.017, 'train_steps_per_second': 2.255, 'train_loss': 1.682755403
+8426076, 'epoch': 3.0}
+100%|███████████████████████████████████████████████████████████████████████████████| 1737/1737 [12:50<00:00,  2.25it/s]
+[INFO|trainer.py:3705] 2024-11-17 00:49:52,906 >> Saving model checkpoint to /tmp/test-mlm
+[INFO|configuration_utils.py:410] 2024-11-17 00:49:52,907 >> Configuration saved in /tmp/test-mlm/config.json
+[INFO|modeling_utils.py:2836] 2024-11-17 00:49:53,304 >> Model weights saved in /tmp/test-mlm/model.safetensors
+[INFO|tokenization_utils_base.py:2641] 2024-11-17 00:49:53,306 >> tokenizer config file saved in /tmp/test-mlm/tokenizer
+_config.json
+[INFO|tokenization_utils_base.py:2650] 2024-11-17 00:49:53,306 >> Special tokens file saved in /tmp/test-mlm/special_tok
+ens_map.json
+***** train metrics *****
+  epoch                    =        3.0
+  total_flos               =  1287783GF
+  train_loss               =     1.6828
+  train_runtime            = 0:12:50.45
+  train_samples            =       4627
+  train_samples_per_second =     18.017
+  train_steps_per_second   =      2.255
+11/17/2024 00:49:53 - INFO - __main__ - *** Evaluate ***
+[INFO|trainer.py:831] 2024-11-17 00:49:53,322 >> The following columns in the evaluation set don't have a corresponding
+argument in `MobileBertForMaskedLM.forward` and have been ignored: special_tokens_mask. If special_tokens_mask are not e
+xpected by `MobileBertForMaskedLM.forward`,  you can safely ignore this message.
+[INFO|trainer.py:4021] 2024-11-17 00:49:53,324 >>
+***** Running Evaluation *****
+[INFO|trainer.py:4023] 2024-11-17 00:49:53,324 >>   Num examples = 479
+[INFO|trainer.py:4026] 2024-11-17 00:49:53,324 >>   Batch size = 8
+100%|███████████████████████████████████████████████████████████████████████████████████| 60/60 [00:09<00:00,  6.46it/s]
+***** eval metrics *****
+  epoch                   =        3.0
+  eval_accuracy           =     0.6948
+  eval_loss               =     1.4714
+  eval_runtime            = 0:00:09.46
+  eval_samples            =        479
+  eval_samples_per_second =     50.599
+  eval_steps_per_second   =      6.338
+  perplexity              =     4.3555
+~/t/e/p/language-modeling ((v4.45.2)|✔) $ ls                                                               (cs230-proj)
+README.md         run_clm.py             run_fim.py             run_mlm.py             run_plm.py
+requirements.txt  run_clm_no_trainer.py  run_fim_no_trainer.py  run_mlm_no_trainer.py
+~/t/e/p/language-modeling ((v4.45.2)|✔) $ ls /tmp/test-mlm/                                                (cs230-proj)
+README.md         checkpoint-1500  config.json        special_tokens_map.json  train_results.json  vocab.txt
+all_results.json  checkpoint-1737  eval_results.json  tokenizer.json           trainer_state.json
+checkpoint-1000   checkpoint-500   model.safetensors  tokenizer_config.json    training_args.bin
+~/t/e/p/language-modeling ((v4.45.2)|✔) $ less /tmp/test-mlm/README.md                                     (cs230-proj)
+~/t/e/p/language-modeling ((v4.45.2)|✔) $ python run_mlm.py \                                              (cs230-proj)
+                                                  --model_name_or_path FacebookAI/roberta-base \
+                                                  --dataset_name wikitext \
+                                                  --dataset_config_name wikitext-2-raw-v1 \
+                                                  --per_device_train_batch_size 8 \
+                                                  --per_device_eval_batch_size 8 \
+                                                  --do_train \
+                                                  --do_eval \
+                                                  --output_dir /tmp/test-roberta-mlm
+11/17/2024 00:51:37 - WARNING - __main__ - Process rank: 0, device: cuda:0, n_gpu: 1, distributed training: False, 16-bi
+ts training: False
+11/17/2024 00:51:37 - INFO - __main__ - Training/evaluation parameters TrainingArguments(
+_n_gpu=1,
+accelerator_config={'split_batches': False, 'dispatch_batches': None, 'even_batches': True, 'use_seedable_sampler': True
+, 'non_blocking': False, 'gradient_accumulation_kwargs': None, 'use_configured_state': False},
+adafactor=False,
+adam_beta1=0.9,
+adam_beta2=0.999,
+adam_epsilon=1e-08,
+auto_find_batch_size=False,
+batch_eval_metrics=False,
+bf16=False,
+bf16_full_eval=False,
+data_seed=None,
+dataloader_drop_last=False,
+dataloader_num_workers=0,
+dataloader_persistent_workers=False,
+dataloader_pin_memory=True,
+dataloader_prefetch_factor=None,
+ddp_backend=None,
+ddp_broadcast_buffers=None,
+ddp_bucket_cap_mb=None,
+ddp_find_unused_parameters=None,
+ddp_timeout=1800,
+debug=[],
+deepspeed=None,
+disable_tqdm=False,
+dispatch_batches=None,
+do_eval=True,
+do_predict=False,
+do_train=True,
+eval_accumulation_steps=None,
+eval_delay=0,
+eval_do_concat_batches=True,
+eval_on_start=False,
+eval_steps=None,
+eval_strategy=no,
+eval_use_gather_object=False,
+evaluation_strategy=None,
+fp16=False,
+fp16_backend=auto,
+fp16_full_eval=False,
+fp16_opt_level=O1,
+fsdp=[],
+fsdp_config={'min_num_params': 0, 'xla': False, 'xla_fsdp_v2': False, 'xla_fsdp_grad_ckpt': False},
+fsdp_min_num_params=0,
+fsdp_transformer_layer_cls_to_wrap=None,
+full_determinism=False,
+gradient_accumulation_steps=1,
+gradient_checkpointing=False,
+gradient_checkpointing_kwargs=None,
+greater_is_better=None,
+group_by_length=False,
+half_precision_backend=auto,
+hub_always_push=False,
+hub_model_id=None,
+hub_private_repo=False,
+hub_strategy=every_save,
+hub_token=<HUB_TOKEN>,
+ignore_data_skip=False,
+include_inputs_for_metrics=False,
+include_num_input_tokens_seen=False,
+include_tokens_per_second=False,
+jit_mode_eval=False,
+label_names=None,
+label_smoothing_factor=0.0,
+learning_rate=5e-05,
+length_column_name=length,
+load_best_model_at_end=False,
+local_rank=0,
+log_level=passive,
+log_level_replica=warning,
+log_on_each_node=True,
+logging_dir=/tmp/test-roberta-mlm/runs/Nov17_00-51-37_ip-172-31-49-156,
+logging_first_step=False,
+logging_nan_inf_filter=True,
+logging_steps=500,
+logging_strategy=steps,
+lr_scheduler_kwargs={},
+lr_scheduler_type=linear,
+max_grad_norm=1.0,
+max_steps=-1,
+metric_for_best_model=None,
+mp_parameters=,
+neftune_noise_alpha=None,
+no_cuda=False,
+num_train_epochs=3.0,
+optim=adamw_torch,
+optim_args=None,
+optim_target_modules=None,
+output_dir=/tmp/test-roberta-mlm,
+overwrite_output_dir=False,
+past_index=-1,
+per_device_eval_batch_size=8,
+per_device_train_batch_size=8,
+prediction_loss_only=False,
+push_to_hub=False,
+push_to_hub_model_id=None,
+push_to_hub_organization=None,
+push_to_hub_token=<PUSH_TO_HUB_TOKEN>,
+ray_scope=last,
+remove_unused_columns=True,
+report_to=[],
+restore_callback_states_from_checkpoint=False,
+resume_from_checkpoint=None,
+run_name=/tmp/test-roberta-mlm,
+save_on_each_node=False,
+save_only_model=False,
+save_safetensors=True,
+save_steps=500,
+save_strategy=steps,
+save_total_limit=None,
+seed=42,
+skip_memory_metrics=True,
+split_batches=None,
+tf32=None,
+torch_compile=False,
+torch_compile_backend=None,
+torch_compile_mode=None,
+torch_empty_cache_steps=None,
+torchdynamo=None,
+tpu_metrics_debug=False,
+tpu_num_cores=None,
+use_cpu=False,
+use_ipex=False,
+use_legacy_prediction_loop=False,
+use_liger_kernel=False,
+use_mps_device=False,
+warmup_ratio=0.0,
+warmup_steps=0,
+weight_decay=0.0,
+)
+Overwrite dataset info from restored data version if exists.
+11/17/2024 00:51:38 - INFO - datasets.builder - Overwrite dataset info from restored data version if exists.
+Loading Dataset info from /home/ubuntu/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd3
+2d625aee71d232d685c3
+11/17/2024 00:51:38 - INFO - datasets.info - Loading Dataset info from /home/ubuntu/.cache/huggingface/datasets/wikitext
+/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3
+Found cached dataset wikitext (/home/ubuntu/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79
+dfdd32d625aee71d232d685c3)
+11/17/2024 00:51:38 - INFO - datasets.builder - Found cached dataset wikitext (/home/ubuntu/.cache/huggingface/datasets/
+wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3)
+Loading Dataset info from /home/ubuntu/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd3
+2d625aee71d232d685c3
+11/17/2024 00:51:38 - INFO - datasets.info - Loading Dataset info from /home/ubuntu/.cache/huggingface/datasets/wikitext
+/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3
+config.json: 100%|█████████████████████████████████████████████████████████████████████| 481/481 [00:00<00:00, 2.94MB/s]
+[INFO|configuration_utils.py:675] 2024-11-17 00:51:38,895 >> loading configuration file config.json from cache at /home/
+ubuntu/.cache/huggingface/hub/models--FacebookAI--roberta-base/snapshots/e2da8e2f811d1448a5b465c236feacd80ffbac7b/config
+.json
+[INFO|configuration_utils.py:742] 2024-11-17 00:51:38,896 >> Model config RobertaConfig {
+  "_name_or_path": "FacebookAI/roberta-base",
+  "architectures": [
+    "RobertaForMaskedLM"
+  ],
+  "attention_probs_dropout_prob": 0.1,
+  "bos_token_id": 0,
+  "classifier_dropout": null,
+  "eos_token_id": 2,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "layer_norm_eps": 1e-05,
+  "max_position_embeddings": 514,
+  "model_type": "roberta",
+  "num_attention_heads": 12,
+  "num_hidden_layers": 12,
+  "pad_token_id": 1,
+  "position_embedding_type": "absolute",
+  "transformers_version": "4.45.2",
+  "type_vocab_size": 1,
+  "use_cache": true,
+  "vocab_size": 50265
+}
+
+tokenizer_config.json: 100%|██████████████████████████████████████████████████████████| 25.0/25.0 [00:00<00:00, 181kB/s]
+[INFO|configuration_utils.py:675] 2024-11-17 00:51:38,943 >> loading configuration file config.json from cache at /home/
+ubuntu/.cache/huggingface/hub/models--FacebookAI--roberta-base/snapshots/e2da8e2f811d1448a5b465c236feacd80ffbac7b/config
+.json
+[INFO|configuration_utils.py:742] 2024-11-17 00:51:38,944 >> Model config RobertaConfig {
+  "_name_or_path": "FacebookAI/roberta-base",
+  "architectures": [
+    "RobertaForMaskedLM"
+  ],
+  "attention_probs_dropout_prob": 0.1,
+  "bos_token_id": 0,
+  "classifier_dropout": null,
+  "eos_token_id": 2,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "layer_norm_eps": 1e-05,
+  "max_position_embeddings": 514,
+  "model_type": "roberta",
+  "num_attention_heads": 12,
+  "num_hidden_layers": 12,
+  "pad_token_id": 1,
+  "position_embedding_type": "absolute",
+  "transformers_version": "4.45.2",
+  "type_vocab_size": 1,
+  "use_cache": true,
+  "vocab_size": 50265
+}
+
+vocab.json: 100%|████████████████████████████████████████████████████████████████████| 899k/899k [00:00<00:00, 44.4MB/s]
+merges.txt: 100%|████████████████████████████████████████████████████████████████████| 456k/456k [00:00<00:00, 38.1MB/s]
+tokenizer.json: 100%|██████████████████████████████████████████████████████████████| 1.36M/1.36M [00:00<00:00, 23.5MB/s]
+[INFO|tokenization_utils_base.py:2206] 2024-11-17 00:51:39,219 >> loading file vocab.json from cache at /home/ubuntu/.ca
+che/huggingface/hub/models--FacebookAI--roberta-base/snapshots/e2da8e2f811d1448a5b465c236feacd80ffbac7b/vocab.json
+[INFO|tokenization_utils_base.py:2206] 2024-11-17 00:51:39,219 >> loading file merges.txt from cache at /home/ubuntu/.ca
+che/huggingface/hub/models--FacebookAI--roberta-base/snapshots/e2da8e2f811d1448a5b465c236feacd80ffbac7b/merges.txt
+[INFO|tokenization_utils_base.py:2206] 2024-11-17 00:51:39,219 >> loading file tokenizer.json from cache at /home/ubuntu
+/.cache/huggingface/hub/models--FacebookAI--roberta-base/snapshots/e2da8e2f811d1448a5b465c236feacd80ffbac7b/tokenizer.js
+on
+[INFO|tokenization_utils_base.py:2206] 2024-11-17 00:51:39,220 >> loading file added_tokens.json from cache at None
+[INFO|tokenization_utils_base.py:2206] 2024-11-17 00:51:39,220 >> loading file special_tokens_map.json from cache at Non
+e
+[INFO|tokenization_utils_base.py:2206] 2024-11-17 00:51:39,220 >> loading file tokenizer_config.json from cache at /home
+/ubuntu/.cache/huggingface/hub/models--FacebookAI--roberta-base/snapshots/e2da8e2f811d1448a5b465c236feacd80ffbac7b/token
+izer_config.json
+[INFO|configuration_utils.py:675] 2024-11-17 00:51:39,220 >> loading configuration file config.json from cache at /home/
+ubuntu/.cache/huggingface/hub/models--FacebookAI--roberta-base/snapshots/e2da8e2f811d1448a5b465c236feacd80ffbac7b/config
+.json
+[INFO|configuration_utils.py:742] 2024-11-17 00:51:39,221 >> Model config RobertaConfig {
+  "_name_or_path": "FacebookAI/roberta-base",
+  "architectures": [
+    "RobertaForMaskedLM"
+  ],
+  "attention_probs_dropout_prob": 0.1,
+  "bos_token_id": 0,
+  "classifier_dropout": null,
+  "eos_token_id": 2,
+  "hidden_act": "gelu",
+  "hidden_dropout_prob": 0.1,
+  "hidden_size": 768,
+  "initializer_range": 0.02,
+  "intermediate_size": 3072,
+  "layer_norm_eps": 1e-05,
+  "max_position_embeddings": 514,
+  "model_type": "roberta",
+  "num_attention_heads": 12,
+  "num_hidden_layers": 12,
+  "pad_token_id": 1,
+  "position_embedding_type": "absolute",
+  "transformers_version": "4.45.2",
+  "type_vocab_size": 1,
+  "use_cache": true,
+  "vocab_size": 50265
+}
+
+model.safetensors: 100%|██████████████████████████████████████████████████████████████| 499M/499M [00:02<00:00, 235MB/s]
+[INFO|modeling_utils.py:3732] 2024-11-17 00:51:41,539 >> loading weights file model.safetensors from cache at /home/ubun
+tu/.cache/huggingface/hub/models--FacebookAI--roberta-base/snapshots/e2da8e2f811d1448a5b465c236feacd80ffbac7b/model.safe
+tensors
+[INFO|modeling_utils.py:4574] 2024-11-17 00:51:41,925 >> All model checkpoint weights were used when initializing Robert
+aForMaskedLM.
+
+[INFO|modeling_utils.py:4582] 2024-11-17 00:51:41,925 >> All the weights of RobertaForMaskedLM were initialized from the
+ model checkpoint at FacebookAI/roberta-base.
+If your task is similar to the task the model of the checkpoint was trained on, you can already use RobertaForMaskedLM f
+or predictions without further training.
+Running tokenizer on every text in dataset:   0%|                                       | 0/4358 [00:00<?, ? examples/s]
+Caching processed dataset at /home/ubuntu/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79df
+dd32d625aee71d232d685c3/cache-d4065160e501e95b.arrow
+11/17/2024 00:51:42 - INFO - datasets.arrow_dataset - Caching processed dataset at /home/ubuntu/.cache/huggingface/datas
+ets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3/cache-d4065160e501e95b.arrow
+Running tokenizer on every text in dataset:  69%|█████████████████▉        | 3000/4358 [00:00<00:00, 7925.00 examples/s]
+[WARNING|tokenization_utils_base.py:4084] 2024-11-17 00:51:42,439 >> Token indices sequence length is longer than the sp
+ecified maximum sequence length for this model (544 > 512). Running this sequence through the model will result in index
+ing errors
+Running tokenizer on every text in dataset: 100%|██████████████████████████| 4358/4358 [00:00<00:00, 8213.70 examples/s]
+Running tokenizer on every text in dataset:   0%|                                      | 0/36718 [00:00<?, ? examples/s]
+Caching processed dataset at /home/ubuntu/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79df
+dd32d625aee71d232d685c3/cache-33c44e576ec7f3c6.arrow
+11/17/2024 00:51:42 - INFO - datasets.arrow_dataset - Caching processed dataset at /home/ubuntu/.cache/huggingface/datas
+ets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3/cache-33c44e576ec7f3c6.arrow
+Running tokenizer on every text in dataset: 100%|████████████████████████| 36718/36718 [00:04<00:00, 8155.53 examples/s]
+Running tokenizer on every text in dataset:   0%|                                       | 0/3760 [00:00<?, ? examples/s]
+Caching processed dataset at /home/ubuntu/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79df
+dd32d625aee71d232d685c3/cache-dc2185107ebf551c.arrow
+11/17/2024 00:51:47 - INFO - datasets.arrow_dataset - Caching processed dataset at /home/ubuntu/.cache/huggingface/datas
+ets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3/cache-dc2185107ebf551c.arrow
+Running tokenizer on every text in dataset: 100%|██████████████████████████| 3760/3760 [00:00<00:00, 8720.82 examples/s]
+Grouping texts in chunks of 512:   0%|                                                  | 0/4358 [00:00<?, ? examples/s]
+Caching processed dataset at /home/ubuntu/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79df
+dd32d625aee71d232d685c3/cache-258fa4b5e15b00cb.arrow
+11/17/2024 00:51:47 - INFO - datasets.arrow_dataset - Caching processed dataset at /home/ubuntu/.cache/huggingface/datas
+ets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3/cache-258fa4b5e15b00cb.arrow
+Grouping texts in chunks of 512: 100%|████████████████████████████████████| 4358/4358 [00:00<00:00, 10102.01 examples/s]
+Grouping texts in chunks of 512:   0%|                                                 | 0/36718 [00:00<?, ? examples/s]
+Caching processed dataset at /home/ubuntu/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79df
+dd32d625aee71d232d685c3/cache-769901848c31531a.arrow
+11/17/2024 00:51:48 - INFO - datasets.arrow_dataset - Caching processed dataset at /home/ubuntu/.cache/huggingface/datas
+ets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3/cache-769901848c31531a.arrow
+Grouping texts in chunks of 512: 100%|██████████████████████████████████| 36718/36718 [00:03<00:00, 10094.20 examples/s]
+Grouping texts in chunks of 512:   0%|                                                  | 0/3760 [00:00<?, ? examples/s]
+Caching processed dataset at /home/ubuntu/.cache/huggingface/datasets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79df
+dd32d625aee71d232d685c3/cache-bf90e95a46903c52.arrow
+11/17/2024 00:51:51 - INFO - datasets.arrow_dataset - Caching processed dataset at /home/ubuntu/.cache/huggingface/datas
+ets/wikitext/wikitext-2-raw-v1/0.0.0/b08601e04326c79dfdd32d625aee71d232d685c3/cache-bf90e95a46903c52.arrow
+Grouping texts in chunks of 512: 100%|████████████████████████████████████| 3760/3760 [00:00<00:00, 10038.93 examples/s]
+[INFO|trainer.py:831] 2024-11-17 00:51:52,512 >> The following columns in the training set don't have a corresponding ar
+gument in `RobertaForMaskedLM.forward` and have been ignored: special_tokens_mask. If special_tokens_mask are not expect
+ed by `RobertaForMaskedLM.forward`,  you can safely ignore this message.
+[INFO|trainer.py:2243] 2024-11-17 00:51:52,521 >> ***** Running training *****
+[INFO|trainer.py:2244] 2024-11-17 00:51:52,521 >>   Num examples = 4,798
+[INFO|trainer.py:2245] 2024-11-17 00:51:52,521 >>   Num Epochs = 3
+[INFO|trainer.py:2246] 2024-11-17 00:51:52,521 >>   Instantaneous batch size per device = 8
+[INFO|trainer.py:2249] 2024-11-17 00:51:52,521 >>   Total train batch size (w. parallel, distributed & accumulation) = 8
+[INFO|trainer.py:2250] 2024-11-17 00:51:52,521 >>   Gradient Accumulation steps = 1
+[INFO|trainer.py:2251] 2024-11-17 00:51:52,521 >>   Total optimization steps = 1,800
+[INFO|trainer.py:2252] 2024-11-17 00:51:52,522 >>   Number of trainable parameters = 124,697,433
+{'loss': 1.491, 'grad_norm': 8.894095420837402, 'learning_rate': 3.611111111111111e-05, 'epoch': 0.83}
+ 28%|██████████████████████▏                                                         | 500/1800 [07:51<20:23,  1.06it/s]
+[INFO|trainer.py:3705] 2024-11-17 00:59:44,064 >> Saving model checkpoint to /tmp/test-roberta-mlm/checkpoint-500
+[INFO|configuration_utils.py:410] 2024-11-17 00:59:44,066 >> Configuration saved in /tmp/test-roberta-mlm/checkpoint-500
+/config.json
+[INFO|modeling_utils.py:2836] 2024-11-17 00:59:45,050 >> Model weights saved in /tmp/test-roberta-mlm/checkpoint-500/mod
+el.safetensors
+[INFO|tokenization_utils_base.py:2641] 2024-11-17 00:59:45,051 >> tokenizer config file saved in /tmp/test-roberta-mlm/c
+heckpoint-500/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2650] 2024-11-17 00:59:45,052 >> Special tokens file saved in /tmp/test-roberta-mlm/che
+ckpoint-500/special_tokens_map.json
+{'loss': 1.4121, 'grad_norm': 9.182184219360352, 'learning_rate': 2.2222222222222223e-05, 'epoch': 1.67}
+ 56%|███████████████████████████████████████████▉                                   | 1000/1800 [15:44<12:33,  1.06it/s]
+[INFO|trainer.py:3705] 2024-11-17 01:07:37,373 >> Saving model checkpoint to /tmp/test-roberta-mlm/checkpoint-1000
+[INFO|configuration_utils.py:410] 2024-11-17 01:07:37,374 >> Configuration saved in /tmp/test-roberta-mlm/checkpoint-100
+0/config.json
+[INFO|modeling_utils.py:2836] 2024-11-17 01:07:38,347 >> Model weights saved in /tmp/test-roberta-mlm/checkpoint-1000/mo
+del.safetensors
+[INFO|tokenization_utils_base.py:2641] 2024-11-17 01:07:38,348 >> tokenizer config file saved in /tmp/test-roberta-mlm/c
+heckpoint-1000/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2650] 2024-11-17 01:07:38,348 >> Special tokens file saved in /tmp/test-roberta-mlm/che
+ckpoint-1000/special_tokens_map.json
+{'loss': 1.3628, 'grad_norm': 8.742877006530762, 'learning_rate': 8.333333333333334e-06, 'epoch': 2.5}
+ 83%|█████████████████████████████████████████████████████████████████▊             | 1500/1800 [23:38<04:42,  1.06it/s]
+[INFO|trainer.py:3705] 2024-11-17 01:15:30,695 >> Saving model checkpoint to /tmp/test-roberta-mlm/checkpoint-1500
+[INFO|configuration_utils.py:410] 2024-11-17 01:15:30,696 >> Configuration saved in /tmp/test-roberta-mlm/checkpoint-150
+0/config.json
+[INFO|modeling_utils.py:2836] 2024-11-17 01:15:31,694 >> Model weights saved in /tmp/test-roberta-mlm/checkpoint-1500/mo
+del.safetensors
+[INFO|tokenization_utils_base.py:2641] 2024-11-17 01:15:31,695 >> tokenizer config file saved in /tmp/test-roberta-mlm/c
+heckpoint-1500/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2650] 2024-11-17 01:15:31,695 >> Special tokens file saved in /tmp/test-roberta-mlm/che
+ckpoint-1500/special_tokens_map.json
+100%|███████████████████████████████████████████████████████████████████████████████| 1800/1800 [28:23<00:00,  1.14it/s]
+[INFO|trainer.py:3705] 2024-11-17 01:20:15,587 >> Saving model checkpoint to /tmp/test-roberta-mlm/checkpoint-1800
+[INFO|configuration_utils.py:410] 2024-11-17 01:20:15,588 >> Configuration saved in /tmp/test-roberta-mlm/checkpoint-180
+0/config.json
+[INFO|modeling_utils.py:2836] 2024-11-17 01:20:16,592 >> Model weights saved in /tmp/test-roberta-mlm/checkpoint-1800/mo
+del.safetensors
+[INFO|tokenization_utils_base.py:2641] 2024-11-17 01:20:16,593 >> tokenizer config file saved in /tmp/test-roberta-mlm/c
+heckpoint-1800/tokenizer_config.json
+[INFO|tokenization_utils_base.py:2650] 2024-11-17 01:20:16,593 >> Special tokens file saved in /tmp/test-roberta-mlm/che
+ckpoint-1800/special_tokens_map.json
+[INFO|trainer.py:2505] 2024-11-17 01:20:17,967 >>
+
+Training completed. Do not forget to share your model on huggingface.co/models =)
+
+
+{'train_runtime': 1705.4457, 'train_samples_per_second': 8.44, 'train_steps_per_second': 1.055, 'train_loss': 1.40349312
+67632378, 'epoch': 3.0}
+100%|███████████████████████████████████████████████████████████████████████████████| 1800/1800 [28:25<00:00,  1.06it/s]
+[INFO|trainer.py:3705] 2024-11-17 01:20:17,969 >> Saving model checkpoint to /tmp/test-roberta-mlm
+[INFO|configuration_utils.py:410] 2024-11-17 01:20:17,970 >> Configuration saved in /tmp/test-roberta-mlm/config.json
+[INFO|modeling_utils.py:2836] 2024-11-17 01:20:18,945 >> Model weights saved in /tmp/test-roberta-mlm/model.safetensors
+[INFO|tokenization_utils_base.py:2641] 2024-11-17 01:20:18,946 >> tokenizer config file saved in /tmp/test-roberta-mlm/t
+okenizer_config.json
+[INFO|tokenization_utils_base.py:2650] 2024-11-17 01:20:18,946 >> Special tokens file saved in /tmp/test-roberta-mlm/spe
+cial_tokens_map.json
+***** train metrics *****
+  epoch                    =        3.0
+  total_flos               =  3529193GF
+  train_loss               =     1.4035
+  train_runtime            = 0:28:25.44
+  train_samples            =       4798
+  train_samples_per_second =       8.44
+  train_steps_per_second   =      1.055
+11/17/2024 01:20:19 - INFO - __main__ - *** Evaluate ***
+[INFO|trainer.py:831] 2024-11-17 01:20:19,000 >> The following columns in the evaluation set don't have a corresponding
+argument in `RobertaForMaskedLM.forward` and have been ignored: special_tokens_mask. If special_tokens_mask are not expe
+cted by `RobertaForMaskedLM.forward`,  you can safely ignore this message.
+[INFO|trainer.py:4021] 2024-11-17 01:20:19,002 >>
+***** Running Evaluation *****
+[INFO|trainer.py:4023] 2024-11-17 01:20:19,002 >>   Num examples = 496
+[INFO|trainer.py:4026] 2024-11-17 01:20:19,002 >>   Batch size = 8
+100%|███████████████████████████████████████████████████████████████████████████████████| 62/62 [00:17<00:00,  3.50it/s]
+***** eval metrics *****
+  epoch                   =        3.0
+  eval_accuracy           =     0.7309
+  eval_loss               =     1.2572
+  eval_runtime            = 0:00:17.99
+  eval_samples            =        496
+  eval_samples_per_second =     27.556
+  eval_steps_per_second   =      3.445
+  perplexity              =     3.5157
+~/t/e/p/language-modeling ((v4.45.2)|✔) $ less /tmp/test-roberta-mlm/README.md                             (cs230-proj)
+~/t/e/p/language-modeling ((v4.45.2)|✔) $ nvidia-smi                                                       (cs230-proj)
+Sun Nov 17 02:18:23 2024
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 550.90.07              Driver Version: 550.90.07      CUDA Version: 12.4     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  Tesla T4                       On  |   00000000:00:1E.0 Off |                    0 |
+| N/A   37C    P0             43W /   70W |    1147MiB /  15360MiB |     30%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI        PID   Type   Process name                              GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|    0   N/A  N/A      8843      C   ...niforge3/envs/cs230-proj/bin/python       1144MiB |
++-----------------------------------------------------------------------------------------+
+~/t/e/p/language-modeling ((v4.45.2)|✔) $                                                                  (cs230-proj)
