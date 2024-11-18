@@ -6,6 +6,7 @@ import evaluate
 import numpy as np
 import torch
 from datasets import load_dataset
+from safetensors.torch import load_model
 from transformers import (
     AutoModelForSequenceClassification,
     AutoTokenizer,
@@ -23,16 +24,19 @@ def train_mnli(args: argparse.Namespace) -> None:
     filename = f"mnli-{args.mode}.pt"
     logger.info(f"will train model and save to {filename}")
 
-    mnli = load_dataset(
-        "nyu-mll/multi_nli"
-    ).select_columns(
+    mnli = load_dataset("nyu-mll/multi_nli").select_columns(
         ["premise", "hypothesis", "label"]
     )
 
     tokenizer = AutoTokenizer.from_pretrained("google/mobilebert-uncased")
 
     def tokenize(batch: Dict[str, List]):
-        return tokenizer(text=batch["premise"], text_pair=batch["hypothesis"], truncation=True, max_length=512)
+        return tokenizer(
+            text=batch["premise"],
+            text_pair=batch["hypothesis"],
+            truncation=True,
+            max_length=512,
+        )
 
     tokenized_mnli = mnli.map(tokenize, batched=True)
 
@@ -52,13 +56,18 @@ def train_mnli(args: argparse.Namespace) -> None:
         num_labels=3,
     )
 
+    if args.pretrained_weights is not None:
+        load_model(model, args.pretrained_weights, strict=False)
+
     match args.mode:
         case "lora":
             lora.wrap_bert_model_with_lora(
                 model, "mobilebert", rank=args.lora_rank, alpha=args.lora_rank
             )
 
-    num_trainable_parameters = sum([param.numel() for param in model.parameters() if param.requires_grad])
+    num_trainable_parameters = sum(
+        [param.numel() for param in model.parameters() if param.requires_grad]
+    )
     logger.info(f"# trainable parameters: {num_trainable_parameters}")
 
     model = model.to("cuda")
@@ -101,6 +110,11 @@ def get_args() -> argparse.Namespace:
         required=True,
         choices=["base", "lora"],
         default="base",
+    )
+    parser.add_argument(
+        "--pretrained_weights",
+        type=str,
+        required=False,
     )
     parser.add_argument(
         "--learning_rate",
