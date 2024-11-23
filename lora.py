@@ -31,11 +31,11 @@ class LoRALayer(nn.Module):
     def forward(self, input):
         return self.original_layer(input) + self.lora_update(input)
 
-def wrap_bert_model_with_lora(model: nn.Module, bert_module_name: str, rank=1, alpha=1):
+def wrap_bert_model_with_lora(model: nn.Module, rank=1, alpha=1):
     for param in model.parameters():
         param.requires_grad = False
     
-    for layer in model.__getattr__(bert_module_name).encoder.layer:
+    for layer in model.base_model.encoder.layer:
         layer.attention.self.query = LoRALayer(
             layer.attention.self.query,
             rank=rank,
