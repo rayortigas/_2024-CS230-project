@@ -28,7 +28,7 @@ def train_mnli(args: argparse.Namespace) -> None:
         ["premise", "hypothesis", "label"]
     )
 
-    tokenizer = AutoTokenizer.from_pretrained("google/mobilebert-uncased")
+    tokenizer = AutoTokenizer.from_pretrained(args.pretrained_id)
 
     def tokenize(batch: Dict[str, List]):
         return tokenizer(
@@ -52,7 +52,7 @@ def train_mnli(args: argparse.Namespace) -> None:
         )
 
     model = AutoModelForSequenceClassification.from_pretrained(
-        "google/mobilebert-uncased",
+        args.pretrained_id,
         num_labels=3,
     )
 
@@ -62,7 +62,7 @@ def train_mnli(args: argparse.Namespace) -> None:
     match args.mode:
         case "lora":
             lora.wrap_bert_model_with_lora(
-                model, "mobilebert", rank=args.lora_rank, alpha=args.lora_rank
+                model, rank=args.lora_rank, alpha=args.lora_rank
             )
 
     num_trainable_parameters = sum(
@@ -110,6 +110,12 @@ def get_args() -> argparse.Namespace:
         required=True,
         choices=["base", "lora"],
         default="base",
+    )
+    parser.add_argument(
+        "--pretrained_id",
+        type=str,
+        required=False,
+        default="bert-base-uncased",
     )
     parser.add_argument(
         "--pretrained_weights",
