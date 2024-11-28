@@ -16,12 +16,18 @@ from transformers import (
 )
 
 import lora
+from utils import set_seed
 
 logger = logging.getLogger(__name__)
 
 
 def train_sst2(args: argparse.Namespace) -> None:
-    filename = f"sst2-{args.mode}.pt"
+    match args.mode:
+        case "sft":
+            filename = f"teachers/sst2_{args.tag}_{args.mode}_seed-{args.seed}.pt"
+        case "lora":
+            filename = f"teachers/sst2_{args.tag}_{args.mode}-{args.lora_rank}_seed-{args.seed}.pt"
+
     logger.info(f"will train model and save to {filename}")
 
     sst2 = load_dataset("stanfordnlp/sst2")
@@ -69,12 +75,14 @@ def train_sst2(args: argparse.Namespace) -> None:
         output_dir=f"tmp/sst2-{args.mode}",
         learning_rate=args.learning_rate,
         warmup_ratio=args.warmup_ratio,
-        per_device_train_batch_size=16,
-        per_device_eval_batch_size=16,
-        num_train_epochs=5,
-        weight_decay=0.01,
+        per_device_train_batch_size=args.train_batch_size,
+        per_device_eval_batch_size=args.eval_batch_size,
+        num_train_epochs=args.num_train_epochs,
+        weight_decay=args.weight_decay,
         eval_strategy="epoch",
         save_strategy="epoch",
+        logging_strategy="epoch",
+        logging_dir="./logs",
         load_best_model_at_end=True,
         metric_for_best_model="eval_accuracy",
         push_to_hub=False,
@@ -92,17 +100,28 @@ def train_sst2(args: argparse.Namespace) -> None:
 
     trainer.train()
 
-    torch.save(model.state_dict(), f"sst2-{args.mode}.pt")
+    torch.save(model.state_dict(), filename)
 
 
 def get_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument(
+        "--tag",
+        type=str,
+        required=True,
+    )
+    parser.add_argument(
+        "--seed",
+        type=int,
+        required=False,
+        default=0,
+    )
+    parser.add_argument(
         "--mode",
         type=str,
         required=True,
-        choices=["base", "lora"],
-        default="base",
+        choices=["sft", "lora"],
+        default="sft",
     )
     parser.add_argument(
         "--pretrained_id",
@@ -126,6 +145,27 @@ def get_args() -> argparse.Namespace:
         required=False,
     )
     parser.add_argument(
+        "--train_batch_size",
+        type=int,
+        required=True,
+    )
+    parser.add_argument(
+        "--eval_batch_size",
+        type=int,
+        required=True,
+    )
+    parser.add_argument(
+        "--num_train_epochs",
+        type=int,
+        required=True,
+    )
+    parser.add_argument(
+        "--weight_decay",
+        type=float,
+        required=False,
+        default=0.01,
+    )
+    parser.add_argument(
         "--lora_rank",
         type=int,
         required=False,
@@ -141,4 +181,5 @@ def get_args() -> argparse.Namespace:
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
     args = get_args()
+    set_seed(args.seed)
     train_sst2(args)
