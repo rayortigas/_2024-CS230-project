@@ -6,11 +6,10 @@ import evaluate
 import numpy as np
 import torch
 from datasets import load_dataset
-from safetensors.torch import load_model
 from transformers import (
+    AutoConfig,
     AutoModelForSequenceClassification,
     AutoTokenizer,
-    AutoConfig,
     DataCollatorWithPadding,
     Trainer,
     TrainingArguments,

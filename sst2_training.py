@@ -6,11 +6,10 @@ import evaluate
 import numpy as np
 import torch
 from datasets import load_dataset
-from safetensors.torch import load_model
 from transformers import (
+    AutoConfig,
     AutoModelForSequenceClassification,
     AutoTokenizer,
-    AutoConfig,
     DataCollatorWithPadding,
     Trainer,
     TrainingArguments,
@@ -25,9 +24,9 @@ logger = logging.getLogger(__name__)
 def train_sst2(args: argparse.Namespace) -> None:
     match args.mode:
         case "sft":
-            filename = f"teachers/sst2_{args.tag}_{args.mode}_seed-{args.seed}.pt"
+            filename = f"{args.base_output_dir}/sst2_{args.tag}_{args.mode}_seed-{args.seed}.pt"
         case "lora":
-            filename = f"teachers/sst2_{args.tag}_{args.mode}-{args.lora_rank}_seed-{args.seed}.pt"
+            filename = f"{args.base_output_dir}/sst2_{args.tag}_{args.mode}-{args.lora_rank}_seed-{args.seed}.pt"
 
     logger.info(f"will train model and save to {filename}")
 
@@ -114,6 +113,11 @@ def train_sst2(args: argparse.Namespace) -> None:
 
 def get_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--base_output_dir",
+        type=str,
+        required=True,
+    )
     parser.add_argument(
         "--tag",
         type=str,
