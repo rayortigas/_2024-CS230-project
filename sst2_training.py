@@ -1,5 +1,6 @@
 import argparse
 import logging
+from pathlib import Path
 from typing import Dict, List
 
 import evaluate
@@ -15,6 +16,7 @@ from transformers import (
     TrainingArguments,
 )
 
+from distillation import DistillationTrainer, DistillationTrainingArguments
 import lora
 from utils import set_seed
 
@@ -22,14 +24,6 @@ logger = logging.getLogger(__name__)
 
 
 def train_sst2(args: argparse.Namespace) -> None:
-    match args.mode:
-        case "sft":
-            filename = f"{args.base_output_dir}/sst2_{args.tag}_{args.mode}_seed-{args.seed}.pt"
-        case "lora":
-            filename = f"{args.base_output_dir}/sst2_{args.tag}_{args.mode}-{args.lora_rank}_seed-{args.seed}.pt"
-
-    logger.info(f"will train model and save to {filename}")
-
     if args.pretrained_id is not None:
         model = AutoModelForSequenceClassification.from_pretrained(
             args.pretrained_id,
@@ -79,32 +73,76 @@ def train_sst2(args: argparse.Namespace) -> None:
             references=labels,
         )
 
-    training_args = TrainingArguments(
-        output_dir=f"tmp/sst2-{args.mode}",
-        learning_rate=args.learning_rate,
-        warmup_ratio=args.warmup_ratio,
-        per_device_train_batch_size=args.train_batch_size,
-        per_device_eval_batch_size=args.eval_batch_size,
-        num_train_epochs=args.num_train_epochs,
-        weight_decay=args.weight_decay,
-        eval_strategy="epoch",
-        save_strategy="epoch",
-        logging_strategy="epoch",
-        logging_dir="./logs",
-        load_best_model_at_end=True,
-        metric_for_best_model="eval_accuracy",
-        push_to_hub=False,
-    )
+    def create_training_args(training_args_cls, **kwargs):
+        return training_args_cls(
+            output_dir=f"tmp/sst2-{args.mode}",
+            learning_rate=args.learning_rate,
+            warmup_ratio=args.warmup_ratio,
+            per_device_train_batch_size=args.train_batch_size,
+            per_device_eval_batch_size=args.eval_batch_size,
+            num_train_epochs=args.num_train_epochs,
+            weight_decay=args.weight_decay,
+            eval_strategy="epoch",
+            save_strategy="epoch",
+            logging_strategy="epoch",
+            logging_dir="./logs",
+            load_best_model_at_end=True,
+            metric_for_best_model="eval_accuracy",
+            push_to_hub=False,
+            **kwargs,
+        )
 
-    trainer = Trainer(
-        model=model,
-        args=training_args,
-        train_dataset=tokenized_sst2["train"],
-        eval_dataset=tokenized_sst2["validation"],
-        tokenizer=tokenizer,
-        data_collator=data_collator,
-        compute_metrics=compute_metrics,
-    )
+    def create_trainer(trainer_cls, training_args, **kwargs):
+        return trainer_cls(
+            model=model,
+            args=training_args,
+            train_dataset=tokenized_sst2["train"],
+            eval_dataset=tokenized_sst2["validation"],
+            tokenizer=tokenizer,
+            data_collator=data_collator,
+            compute_metrics=compute_metrics,
+            **kwargs,
+        )
+
+    if args.distillation_temperature is None:
+        match args.mode:
+            case "sft":
+                filename = f"{args.base_output_dir}/sst2_{args.tag}_{args.mode}_seed-{args.seed}.pt"
+            case "lora":
+                filename = f"{args.base_output_dir}/sst2_{args.tag}_{args.mode}-{args.lora_rank}_seed-{args.seed}.pt"
+
+        training_args = create_training_args(TrainingArguments)
+        trainer = create_trainer(Trainer, training_args)
+    else:
+        teacher_stem = Path(args.distillation_teacher_weights).stem
+        match args.mode:
+            case "sft":
+                filename = f"{args.base_output_dir}/sst2_{args.tag}_{args.mode}_teacher-{teacher_stem}_seed-{args.seed}.pt"
+            case "lora":
+                filename = f"{args.base_output_dir}/sst2_{args.tag}_{args.mode}-{args.lora_rank}_teacher-{teacher_stem}_seed-{args.seed}.pt"
+
+        training_args = create_training_args(
+            DistillationTrainingArguments, temperature=args.distillation_temperature
+        )
+        teacher_model = AutoModelForSequenceClassification.from_pretrained(
+            args.distillation_teacher_id,
+            num_labels=2,
+        )
+        if args.distillation_teacher_mode == "lora":
+            teacher_model = lora.wrap_bert_model_with_lora(
+                teacher_model,
+                rank=args.distillation_teacher_lora_rank,
+                alpha=args.distillation_teacher_lora_rank,
+            )
+        teacher_model.load_state_dict(
+            torch.load(args.distillation_teacher_weights, weights_only=True)
+        )
+        teacher_model = teacher_model.to("cuda")
+        trainer = create_trainer(
+            DistillationTrainer, training_args, teacher_model=teacher_model
+        )
+
+    logger.info(f"will train model and save to {filename}")
 
     trainer.train()
 
@@ -132,9 +170,8 @@ def get_args() -> argparse.Namespace:
     parser.add_argument(
         "--mode",
         type=str,
-        required=True,
+        required=False,
         choices=["sft", "lora"],
-        default="sft",
     )
     parser.add_argument(
         "--pretrained_id",
@@ -153,6 +190,27 @@ def get_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--tokenizer_id",
+        type=str,
+        required=False,
+    )
+    parser.add_argument(
+        "--distillation_temperature",
+        type=float,
+        required=False,
+    )
+    parser.add_argument(
+        "--distillation_teacher_mode",
+        type=str,
+        required=False,
+        choices=["sft", "lora"],
+    )
+    parser.add_argument(
+        "--distillation_teacher_id",
+        type=str,
+        required=False,
+    )
+    parser.add_argument(
+        "--distillation_teacher_weights",
         type=str,
         required=False,
     )
@@ -192,10 +250,20 @@ def get_args() -> argparse.Namespace:
         type=int,
         required=False,
     )
+    parser.add_argument(
+        "--distillation_teacher_lora_rank",
+        type=int,
+        required=False,
+    )
     args = parser.parse_args()
     if args.mode == "lora":
         if not args.lora_rank:
             parser.error("`lora_rank` is required if using `lora` mode.")
+    if args.distillation_teacher_mode == "lora":
+        if not args.distillation_teacher_lora_rank:
+            parser.error(
+                "`distillation_teacher_lora_rank` is required if using distillation teacher `lora` mode."
+            )
 
     return args
 
