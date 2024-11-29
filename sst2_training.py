@@ -10,6 +10,7 @@ from safetensors.torch import load_model
 from transformers import (
     AutoModelForSequenceClassification,
     AutoTokenizer,
+    AutoConfig,
     DataCollatorWithPadding,
     Trainer,
     TrainingArguments,
@@ -30,9 +31,38 @@ def train_sst2(args: argparse.Namespace) -> None:
 
     logger.info(f"will train model and save to {filename}")
 
+    if args.pretrained_id is not None:
+        model = AutoModelForSequenceClassification.from_pretrained(
+            args.pretrained_id,
+            num_labels=2,
+        )
+    else:
+        model = AutoModelForSequenceClassification.from_pretrained(
+            args.pretrained_weights,
+            config=AutoConfig.from_pretrained(
+                args.pretrained_config,
+                num_labels=2,
+            ),
+        )
+
+    match args.mode:
+        case "lora":
+            lora.wrap_bert_model_with_lora(
+                model, rank=args.lora_rank, alpha=args.lora_rank
+            )
+
+    num_trainable_parameters = sum(
+        [param.numel() for param in model.parameters() if param.requires_grad]
+    )
+    logger.info(f"# trainable parameters: {num_trainable_parameters}")
+
+    model = model.to("cuda")
+
     sst2 = load_dataset("stanfordnlp/sst2")
 
-    tokenizer = AutoTokenizer.from_pretrained(args.pretrained_id)
+    tokenizer = AutoTokenizer.from_pretrained(
+        args.tokenizer_id if args.tokenizer_id is not None else args.pretrained_id
+    )
 
     def tokenize(batch: Dict[str, List]):
         return tokenizer(batch["sentence"], truncation=True, max_length=512)
@@ -49,27 +79,6 @@ def train_sst2(args: argparse.Namespace) -> None:
             predictions=np.argmax(predictions, axis=1),
             references=labels,
         )
-
-    model = AutoModelForSequenceClassification.from_pretrained(
-        args.pretrained_id,
-        num_labels=2,
-    )
-
-    if args.pretrained_weights is not None:
-        load_model(model, args.pretrained_weights, strict=False)
-
-    match args.mode:
-        case "lora":
-            lora.wrap_bert_model_with_lora(
-                model, rank=args.lora_rank, alpha=args.lora_rank
-            )
-
-    num_trainable_parameters = sum(
-        [param.numel() for param in model.parameters() if param.requires_grad]
-    )
-    logger.info(f"# trainable parameters: {num_trainable_parameters}")
-
-    model = model.to("cuda")
 
     training_args = TrainingArguments(
         output_dir=f"tmp/sst2-{args.mode}",
@@ -127,10 +136,19 @@ def get_args() -> argparse.Namespace:
         "--pretrained_id",
         type=str,
         required=False,
-        default="bert-base-uncased",
     )
     parser.add_argument(
         "--pretrained_weights",
+        type=str,
+        required=False,
+    )
+    parser.add_argument(
+        "--pretrained_config",
+        type=str,
+        required=False,
+    )
+    parser.add_argument(
+        "--tokenizer_id",
         type=str,
         required=False,
     )
