@@ -10,6 +10,7 @@ from safetensors.torch import load_model
 from transformers import (
     AutoModelForSequenceClassification,
     AutoTokenizer,
+    AutoConfig,
     DataCollatorWithPadding,
     Trainer,
     TrainingArguments,
@@ -24,17 +25,46 @@ logger = logging.getLogger(__name__)
 def train_mnli(args: argparse.Namespace) -> None:
     match args.mode:
         case "sft":
-            filename = f"teachers/mnli_{args.tag}_{args.mode}_seed-{args.seed}.pt"
+            filename = f"{args.base_output_dir}/mnli_{args.tag}_{args.mode}_seed-{args.seed}.pt"
         case "lora":
-            filename = f"teachers/mnli_{args.tag}_{args.mode}-{args.lora_rank}_seed-{args.seed}.pt"
+            filename = f"{args.base_output_dir}/mnli_{args.tag}_{args.mode}-{args.lora_rank}_seed-{args.seed}.pt"
 
     logger.info(f"will train model and save to {filename}")
+
+    if args.pretrained_id is not None:
+        model = AutoModelForSequenceClassification.from_pretrained(
+            args.pretrained_id,
+            num_labels=3,
+        )
+    else:
+        model = AutoModelForSequenceClassification.from_pretrained(
+            args.pretrained_weights,
+            config=AutoConfig.from_pretrained(
+                args.pretrained_config,
+                num_labels=3,
+            ),
+        )
+
+    match args.mode:
+        case "lora":
+            lora.wrap_bert_model_with_lora(
+                model, rank=args.lora_rank, alpha=args.lora_rank
+            )
+
+    num_trainable_parameters = sum(
+        [param.numel() for param in model.parameters() if param.requires_grad]
+    )
+    logger.info(f"# trainable parameters: {num_trainable_parameters}")
+
+    model = model.to("cuda")
 
     mnli = load_dataset("nyu-mll/multi_nli").select_columns(
         ["premise", "hypothesis", "label"]
     )
 
-    tokenizer = AutoTokenizer.from_pretrained(args.pretrained_id)
+    tokenizer = AutoTokenizer.from_pretrained(
+        args.tokenizer_id if args.tokenizer_id is not None else args.pretrained_id
+    )
 
     def tokenize(batch: Dict[str, List]):
         return tokenizer(
@@ -56,27 +86,6 @@ def train_mnli(args: argparse.Namespace) -> None:
             predictions=np.argmax(predictions, axis=1),
             references=labels,
         )
-
-    model = AutoModelForSequenceClassification.from_pretrained(
-        args.pretrained_id,
-        num_labels=3,
-    )
-
-    if args.pretrained_weights is not None:
-        load_model(model, args.pretrained_weights, strict=False)
-
-    match args.mode:
-        case "lora":
-            lora.wrap_bert_model_with_lora(
-                model, rank=args.lora_rank, alpha=args.lora_rank
-            )
-
-    num_trainable_parameters = sum(
-        [param.numel() for param in model.parameters() if param.requires_grad]
-    )
-    logger.info(f"# trainable parameters: {num_trainable_parameters}")
-
-    model = model.to("cuda")
 
     training_args = TrainingArguments(
         output_dir=f"tmp/mnli-{args.mode}",
@@ -113,6 +122,11 @@ def train_mnli(args: argparse.Namespace) -> None:
 def get_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument(
+        "--base_output_dir",
+        type=str,
+        required=True,
+    )
+    parser.add_argument(
         "--tag",
         type=str,
         required=True,
@@ -134,10 +148,19 @@ def get_args() -> argparse.Namespace:
         "--pretrained_id",
         type=str,
         required=False,
-        default="bert-base-uncased",
     )
     parser.add_argument(
         "--pretrained_weights",
+        type=str,
+        required=False,
+    )
+    parser.add_argument(
+        "--pretrained_config",
+        type=str,
+        required=False,
+    )
+    parser.add_argument(
+        "--tokenizer_id",
         type=str,
         required=False,
     )
