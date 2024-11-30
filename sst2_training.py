@@ -3,9 +3,7 @@ import logging
 from typing import Dict, List
 
 from datasets import load_dataset
-from transformers import (
-    PreTrainedTokenizerBase,
-)
+from transformers import PreTrainedTokenizerBase
 
 import training
 from utils import set_seed
