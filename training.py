@@ -127,10 +127,18 @@ def train(
         training_args = create_training_args(
             DistillationTrainingArguments, temperature=args.distillation_temperature
         )
-        teacher_model = AutoModelForSequenceClassification.from_pretrained(
-            args.distillation_teacher_id,
-            num_labels=num_labels,
-        )
+        if args.distillation_teacher_id is not None:
+            teacher_model = AutoModelForSequenceClassification.from_pretrained(
+                args.distillation_teacher_id,
+                num_labels=num_labels,
+            )
+        else:
+            teacher_model = AutoModelForSequenceClassification.from_config(
+                config=AutoConfig.from_pretrained(
+                    args.distillation_teacher_config,
+                    num_labels=num_labels,
+                ),
+            )
         if args.distillation_teacher_mode == "lora":
             teacher_model = lora.wrap_bert_model_with_lora(
                 teacher_model,
@@ -214,6 +222,11 @@ def get_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--distillation_teacher_weights",
+        type=str,
+        required=False,
+    )
+    parser.add_argument(
+        "--distillation_teacher_config",
         type=str,
         required=False,
     )
