@@ -125,7 +125,9 @@ def train(
                 filename = f"{args.base_output_dir}/{task}_{args.tag}_{args.mode}-{args.lora_rank}_teacher-{teacher_stem}_seed-{args.seed}.pt"
 
         training_args = create_training_args(
-            DistillationTrainingArguments, temperature=args.distillation_temperature
+            DistillationTrainingArguments,
+            temperature=args.distillation_temperature,
+            lambd=args.distillation_lambd,
         )
         if args.distillation_teacher_id is not None:
             teacher_model = AutoModelForSequenceClassification.from_pretrained(
@@ -208,6 +210,12 @@ def get_args() -> argparse.Namespace:
         "--distillation_temperature",
         type=float,
         required=False,
+    )
+    parser.add_argument(
+        "--distillation_lambd",
+        type=float,
+        required=False,
+        default=1.0,
     )
     parser.add_argument(
         "--distillation_teacher_mode",
